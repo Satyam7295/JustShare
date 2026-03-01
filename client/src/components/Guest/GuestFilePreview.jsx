@@ -147,7 +147,7 @@ const GuestFilePreview = ({ guestFiles }) => {
         </div>
 
         <select
-          className="px-3 py-2 border rounded-lg text-gray-900"
+          className="px-3 py-2 border border-gray-600 bg-gray-700 rounded-lg text-gray-100"
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
         >
@@ -160,7 +160,7 @@ const GuestFilePreview = ({ guestFiles }) => {
         </select>
 
         <select
-          className="px-3 py-2 border rounded-lg text-gray-900"
+          className="px-3 py-2 border border-gray-600 bg-gray-700 rounded-lg text-gray-100"
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
         >
@@ -184,7 +184,7 @@ const GuestFilePreview = ({ guestFiles }) => {
       </div>
 
       {!files || files.length === 0 ? (
-        <p className="text-gray-500">No files uploaded yet.</p>
+        <p className="text-gray-300">No files uploaded yet.</p>
       ) : (
         <div className="-my-2 overflow-x-auto">
           <div className="inline-block min-w-full py-2 align-middle">
@@ -314,7 +314,7 @@ const GuestFilePreview = ({ guestFiles }) => {
                                 {file.type} | {formattedSize}
                               </div>
                             </div>
-                            <div className="text-sm text-gray-500 mb-1">
+                            <div className="text-sm text-gray-400 mb-1">
                               <span className="font-medium">Status: </span>
                               <span
                                 className={
@@ -326,11 +326,11 @@ const GuestFilePreview = ({ guestFiles }) => {
                                 {file.status}
                               </span>
                             </div>
-                            <div className="text-sm text-gray-500 mb-1">
+                            <div className="text-sm text-gray-400 mb-1">
                               <span className="font-medium">Downloaded:</span>{" "}
                               {file.downloadedContent}
                             </div>
-                            <div className="text-sm text-gray-500 mb-1">
+                            <div className="text-sm text-gray-400 mb-1">
                               <span className="font-medium">Expiry:</span>{" "}
                               {isExpired
                                 ? "Expired"
@@ -339,11 +339,7 @@ const GuestFilePreview = ({ guestFiles }) => {
                                     new Date()
                                   )} days`}
                             </div>
-                            <div className="text-sm text-gray-500 mb-1">
-                              <span className="font-medium">Uploaded:</span>{" "}
-                              {formatDistanceToNowStrict(
-                                new Date(file.createdAt),
-                                {
+                            <div className="text-sm text-gray-400 mb-1">
                                   addSuffix: true,
                                 }
                               )}
@@ -394,7 +390,7 @@ const GuestFilePreview = ({ guestFiles }) => {
                 >
                   Previous
                 </button>
-                <span className="text-sm text-gray-950 dark:text-gray-900">
+                <span className="text-sm text-gray-300 dark:text-gray-400">
                   Page {currentPage} of {totalPages}
                 </span>
                 <button
@@ -432,7 +428,7 @@ const GuestFilePreview = ({ guestFiles }) => {
       {/* Preview Modal */}
       {previewFile && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-lg max-w-2xl w-full">
+          <div className="bg-gray-800 dark:bg-gray-900 p-6 rounded shadow-lg max-w-2xl w-full">
             <h3 className="text-lg font-bold mb-2">{previewFile.name}</h3>
             {/* File Preview */}
             {previewFile.type.startsWith("image/") && (
@@ -476,7 +472,7 @@ const GuestFilePreview = ({ guestFiles }) => {
       {/* Share Modal */}
       {shareFile && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-[--bg-color] p-6 rounded shadow-lg w-full max-w-md md:max-w-2xl">
+          <div className="bg-gray-800 dark:bg-[--bg-color] p-6 rounded shadow-lg w-full max-w-md md:max-w-2xl">
             <h3 className="text-lg font-bold mb-4 text-center">
               Share "{shareFile?.name}"
             </h3>

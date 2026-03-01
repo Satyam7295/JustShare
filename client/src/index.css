@@ -2,41 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-/* custom CSS variables */
+/* custom CSS variables - Dark Theme */
 :root {
-  --bg-color: #ffffff;
-  --text-color: #1f2937;
-  --primary-text: #ec4899;
-  --text-on-primary: #ffffff;
-  --primary-soft: #fce7f3;
-  --primary-gradient: linear-gradient(to right, #ec4899, #8b5cf6);
-  --gradient-bg: linear-gradient(to right, #ec4899, #fbbf24, #6366f1);
+  --bg-color: #000000;
+  --text-color: #f9fafb;
+  --primary-text: #ffffff;
+  --text-on-primary: #000000;
+  --primary-soft: #1f2937;
+  --primary-gradient: linear-gradient(to right, #1f2937, #374151);
+  --gradient-bg: linear-gradient(to right, #000000, #1f2937, #111827);
 }
 
 [data-theme='blue'] {
-  --primary-text: #3b82f6;
-  --primary-soft: #dbeafe;
-  --primary-gradient: linear-gradient(to right, #60a5fa, #3b82f6);
-  --gradient-bg: linear-gradient(to right, #60a5fa, #3b82f6, #2563eb);
+  --primary-text: #60a5fa;
+  --primary-soft: #1e3a8a;
+  --primary-gradient: linear-gradient(to right, #1e3a8a, #3b82f6);
+  --gradient-bg: linear-gradient(to right, #1e3a8a, #3b82f6, #60a5fa);
 }
 
 [data-theme='green'] {
-  --primary-text: #10b981;
-  --primary-soft: #d1fae5;
-  --primary-gradient: linear-gradient(to right, #34d399, #10b981);
-  --gradient-bg: linear-gradient(to right, #34d399, #10b981, #059669);
+  --primary-text: #4ade80;
+  --primary-soft: #166534;
+  --primary-gradient: linear-gradient(to right, #166534, #22c55e);
+  --gradient-bg: linear-gradient(to right, #166534, #22c55e, #4ade80);
 }
 
 [data-theme='purple'] {
-  --primary-text: #8b5cf6;
-  --primary-soft: #ede9fe;
-  --primary-gradient: linear-gradient(to right, #a78bfa, #8b5cf6);
-  --gradient-bg: linear-gradient(to right, #a78bfa, #8b5cf6, #6d28d9);
+  --primary-text: #c084fc;
+  --primary-soft: #6b21a8;
+  --primary-gradient: linear-gradient(to right, #6b21a8, #a855f7);
+  --gradient-bg: linear-gradient(to right, #6b21a8, #a855f7, #c084fc);
 }
 
 [data-mode='dark'] {
-  --bg-color: #1f2937;
+  --bg-color: #000000;
   --text-color: #f9fafb;
-  --text-on-primary: #f9fafb;
-  --primary-soft: rgba(255, 255, 255, 0.05);
+  --text-on-primary: #000000;
+  --primary-soft: rgba(255, 255, 255, 0.1);
+}
+
+/* Global body styling for dark theme */
+body {
+  background-color: #000000;
+  color: #f9fafb;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  min-height: 100vh;
+  background-color: #000000;
 }

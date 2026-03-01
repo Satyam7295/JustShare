@@ -58,7 +58,7 @@ const StatsGrid = () => {
         {cards.map((card, index) => (
           <div
             key={index}
-            className="relative p-5 rounded-xl bg-white dark:bg-gray-900 shadow-md transition hover:shadow-lg"
+            className="relative p-5 rounded-xl bg-gray-900 dark:bg-black shadow-md transition hover:shadow-lg"
           >
             {/* Top Gradient Border */}
             <div className="absolute top-0 left-0 w-full h-1 rounded-t-xl bg-[var(--primary-gradient)]" />

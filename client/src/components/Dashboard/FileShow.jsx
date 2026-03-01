@@ -103,7 +103,7 @@ const paginatedFiles = filteredFiles?.slice(
     <div className="flex flex-col mt-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold mb-4">📁 Your Uploaded Files</h2>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-400">
   Showing {filteredFiles.length} file{filteredFiles.length !== 1 && "s"}
 </p>
 
@@ -326,16 +326,16 @@ const paginatedFiles = filteredFiles?.slice(
               <strong className="text-gray-700 dark:text-gray-200">📄 {sortFileName(file.name)}</strong>
               <div className="text-xs text-gray-400">{file.type} | {formattedSize}</div>
             </div>
-            <div className="text-sm text-gray-500 mb-1">
+            <div className="text-sm text-gray-400 mb-1">
               <span className="font-medium">Status: </span>
               <span className={file.status === "active" ? "text-green-600" : "text-red-500"}>
                 {file.status}
               </span>
             </div>
-            <div className="text-sm text-gray-500 mb-1">
+            <div className="text-sm text-gray-400 mb-1">
               <span className="font-medium">Downloaded:</span> {file.downloadedContent}
             </div>
-            <div className="text-sm text-gray-500 mb-1">
+            <div className="text-sm text-gray-400 mb-1">
               <span className="font-medium">Expiry:</span>{" "}
               {isExpired
                 ? "Expired"
@@ -344,7 +344,7 @@ const paginatedFiles = filteredFiles?.slice(
                     new Date()
                   )} days`}
             </div>
-            <div className="text-sm text-gray-500 mb-1">
+            <div className="text-sm text-gray-400 mb-1">
               <span className="font-medium">Uploaded:</span>{" "}
               {formatDistanceToNowStrict(new Date(file.createdAt), {
                 addSuffix: true,
@@ -385,7 +385,7 @@ const paginatedFiles = filteredFiles?.slice(
   >
     Previous
   </button>
-              <span className="text-sm text-gray-950 dark:text-gray-900">
+              <span className="text-sm text-gray-300 dark:text-gray-400">
                 Page {currentPage} of {totalPages}
               </span>
                <button
@@ -404,7 +404,7 @@ const paginatedFiles = filteredFiles?.slice(
       {/* Preview Modal */}
       {previewFile && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-lg max-w-2xl w-full">
+          <div className="bg-gray-800 dark:bg-gray-900 p-6 rounded shadow-lg max-w-2xl w-full">
             <h3 className="text-lg font-bold mb-2">{previewFile.name}</h3>
               {/* File Preview */}
           {previewFile.type.startsWith("image/") && (
@@ -442,7 +442,7 @@ const paginatedFiles = filteredFiles?.slice(
       
         
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div className="bg-white dark:bg-[--bg-color] p-6 rounded shadow-lg w-full max-w-md md:max-w-2xl">
+  <div className="bg-gray-800 dark:bg-[--bg-color] p-6 rounded shadow-lg w-full max-w-md md:max-w-2xl">
     <h3 className="text-lg font-bold mb-4 text-center">
       Share "{shareFile?.name}"
     </h3>

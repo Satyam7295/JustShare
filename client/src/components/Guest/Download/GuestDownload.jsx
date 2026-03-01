@@ -84,7 +84,7 @@ const GuestDownload = () => {
   };
 
   if (error) return <div className="text-red-500">{error}</div>;
-  if (isLoading || !file) return <div className="text-gray-500">Loading...</div>;
+  if (isLoading || !file) return <div className="text-gray-300">Loading...</div>;
 
   return (
     <div className="w-full max-w-screen-lg mx-auto bg-[var(--bg-color)] rounded shadow-md p-4 sm:p-6 flex flex-col gap-6 lg:flex-row">
@@ -99,7 +99,7 @@ const GuestDownload = () => {
 
   {/* Protected Message */}
   {isProtected && !isVerified ? (
-    <div className="w-full flex flex-col items-center justify-center border-2 border-dashed border-gray-400 p-6 rounded bg-gray-100 dark:bg-gray-800 text-center">
+    <div className="w-full flex flex-col items-center justify-center border-2 border-dashed border-gray-600 p-6 rounded bg-gray-800 dark:bg-gray-900 text-center">
       <img
         src="https://cdn-icons-png.flaticon.com/128/18427/18427887.png" // Replace with your actual placeholder image path
         alt="Protected File"

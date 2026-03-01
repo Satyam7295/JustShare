@@ -47,8 +47,8 @@ const Login = () => {
     }
   }
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
-      <div className="m-0 sm:m-12 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+    <div className="min-h-screen bg-gray-900 text-gray-100 flex justify-center">
+      <div className="m-0 sm:m-12 bg-gray-800 shadow sm:rounded-lg flex justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
           <div>
             {/* <img
@@ -58,14 +58,14 @@ const Login = () => {
             /> */}
           </div>
           <div className="mt-12 flex flex-col items-center">
-            <h1 className="text-2xl xl:text-3xl font-extrabold">
-              Login to Paste Box 
+            <h1 className="text-2xl xl:text-3xl font-extrabold text-white">
+              Login to justshare 
             </h1>
             <div className="w-full flex-1 mt-8">
               <div className="mx-auto max-w-xs">
                
                 <input
-                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-700 border border-gray-600 placeholder-gray-400 text-white text-sm focus:outline-none focus:border-gray-500 focus:bg-gray-600 mt-5"
                   type="email"
                   name="email"
                   onChange={handleChange}
@@ -73,7 +73,7 @@ const Login = () => {
                   placeholder="Email"
                 />
                 <input
-                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-700 border border-gray-600 placeholder-gray-400 text-white text-sm focus:outline-none focus:border-gray-500 focus:bg-gray-600 mt-5"
                   type="password"
                   name="password"
                   onChange={handleChange}
@@ -100,7 +100,7 @@ const Login = () => {
                   </svg>
                   <span className="ml-3">{loading ? "Logging..." : "Login"}</span>
                 </button>
-                <p className="mt-6 text-xs text-gray-600 text-center">
+                <p className="mt-6 text-xs text-gray-300 text-center">
                    Don't have an account?{' '}
                   <a
                     href="/signup"

@@ -10,8 +10,8 @@ const FilePreview = ({ file }) => {
     
       if (loading) {
         return (
-          <div className="flex items-center justify-center min-h-screen bg-white">
-            <h1 className="text-3xl font-bold text-gray-700 animate-pulse">Loading...</h1>
+          <div className="flex items-center justify-center min-h-screen bg-gray-900">
+            <h1 className="text-3xl font-bold text-gray-300 animate-pulse">Loading...</h1>
           </div>
         );
       }

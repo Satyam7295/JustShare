@@ -3,34 +3,15 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 
-const colorMap = {
-  pink: "bg-pink-500",
-  blue: "bg-blue-500",
-  green: "bg-green-500",
-  red: "bg-red-500",
-  purple: "bg-purple-500",
-};
-
 const Header = ({ sidebarOpen, setSidebarOpen }) => {
   const { user } = useSelector((state) => state.auth);
-  const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const [mode, setModeState] = useState("light");
-  const [theme, setThemeState] = useState("pink");
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "pink";
     const savedMode = localStorage.getItem("mode") || "light";
-    setThemeState(savedTheme);
     setModeState(savedMode);
-    document.body.setAttribute("data-theme", savedTheme);
     document.body.setAttribute("data-mode", savedMode);
   }, []);
-
-  const setTheme = (newTheme) => {
-    document.body.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-    setThemeState(newTheme);
-  };
 
   const setMode = (newMode) => {
     document.body.setAttribute("data-mode", newMode);
@@ -59,9 +40,9 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
       <div className="hidden sm:flex flex-col text-center">
         <Link to="/" className="flex items-center space-x-2">
           <img src={logo} alt="Logo" className="w-10 h-10" />
-          <span className="text-3xl font-bold text-[var(--primary-text)]">PasteBox</span>
+          <span className="text-3xl font-bold text-[var(--primary-text)]">JustShare</span>
         </Link>
-        <span className="text-base text-[var(--secondary-text)]">File Sharing Made Easy</span>
+        <span className="text-base text-[var(--secondary-text)]">Share Files Without Logging Into WhatsApp</span>
       </div>
 
       {/* Theme and User */}
@@ -83,31 +64,6 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
           </div>
         </label>
 
-        {/* Theme Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setThemeDropdownOpen(!themeDropdownOpen)}
-            aria-label="Theme settings"
-            className="text-xl"
-          >
-            <img src="https://cdn-icons-png.flaticon.com/128/11460/11460836.png" alt="Theme Icon" className="w-10 h-10" />
-          </button>
-          {themeDropdownOpen && (
-            <div className="absolute right-0 mt-2 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg p-3 z-50 min-w-[150px]">
-              <div className="flex space-x-2 mb-2">
-                {Object.keys(colorMap).map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setTheme(color)}
-                    className={`w-5 h-5 rounded-full ${colorMap[color]}`}
-                    aria-label={`${color} theme`}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
         {/* User Info */}
         <div className="flex items-center space-x-2 cursor-pointer" tabIndex={0} role="button">
           <div className="w-9 h-9 rounded-full bg-[var(--primary-text)] flex items-center justify-center text-white font-bold">
@@ -115,7 +71,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
           </div>
           <div className="hidden md:block">
             <h3 className="text-sm font-medium">{user?.fullname || "User"}</h3>
-            <p className="text-xs text-gray-500">{user?.email || "user@example.com"}</p>
+            <p className="text-xs text-gray-300">{user?.email || "user@example.com"}</p>
           </div>
         </div>
       </div>

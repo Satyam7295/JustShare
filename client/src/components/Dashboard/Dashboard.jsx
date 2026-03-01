@@ -20,15 +20,15 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-white">
-        <h1 className="text-3xl font-bold text-gray-700 animate-pulse">Loading...</h1>
+      <div className="flex items-center justify-center min-h-screen bg-gray-900">
+        <h1 className="text-3xl font-bold text-gray-300 animate-pulse">Loading...</h1>
       </div>
     );
   }
 
   return (
     <>
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen flex bg-gray-900">
       <Sidebar sidebarOpen={sidebarOpen}  setSidebarOpen={setSidebarOpen} setActiveTab={setActiveTab} activeTab={activeTab}/>
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden" onClick={() => setSidebarOpen(false)} />

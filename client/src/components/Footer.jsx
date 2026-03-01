@@ -2,15 +2,11 @@ import React from 'react'
 
 function Footer() {
   return (
-    <footer className="w-full border-t border-gray-300 shadow-inner bg-[var(--bg-color)] text-[var(--text-color)] py-6 px-4 flex flex-col md:flex-row items-center justify-between">
-      <p className="text-center text-sm font-medium">
-        Crafted with ❤️ by <span className="font-semibold">Prince Kumar</span>
-      </p>
-
-      <div className="flex items-center gap-4 mt-4 md:mt-0">
+    <footer className="w-full border-t border-gray-300 shadow-inner bg-[var(--bg-color)] text-[var(--text-color)] py-6 px-4 flex flex-col md:flex-row items-center justify-center">
+      <div className="flex items-center gap-4">
         {/* LinkedIn */}
         <a
-          href="https://www.linkedin.com/in/prince-kumar-788673253/"
+          href="https://www.linkedin.com/in/satyam-kesherwani-529754257/"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:scale-110 transition-transform"
@@ -24,7 +20,7 @@ function Footer() {
 
         {/* GitHub */}
         <a
-          href="https://github.com/princeInScripts"
+          href="https://github.com/Satyam7295"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:scale-110 transition-transform"
@@ -36,23 +32,9 @@ function Footer() {
           />
         </a>
 
-        {/* Instagram */}
-        <a
-          href="https://instagram.com/scriptxprince"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:scale-110 transition-transform"
-        >
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
-            alt="Instagram"
-            className="w-6 h-6 grayscale hover:grayscale-0 transition duration-300"
-          />
-        </a>
-
         {/* Email */}
         <a
-          href="mailto:pk8917912@example.com"
+          href="mailto:work.satyamkesherwani@gmail.com"
           className="hover:scale-110 transition-transform"
         >
           <img

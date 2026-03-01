@@ -21,7 +21,7 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-xl mx-auto mt-10">
+    <div className="p-6 bg-gray-800 shadow-lg rounded-xl mx-auto mt-10">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">User Profile</h2>
 
       <div className="flex items-center gap-6">
@@ -31,10 +31,10 @@ const UserProfile = () => {
           className="w-28 h-28 rounded-full border-4 border-blue-500 shadow"
         />
         <div className="flex-1 space-y-1">
-          <h3 className="text-xl font-semibold text-gray-900">{user.fullname}</h3>
+          <h3 className="text-xl font-semibold text-gray-100">{user.fullname}</h3>
           <p className="text-gray-600">@{user.username}</p>
           <p className="text-gray-700">{user.email}</p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-400">
             User ID: <span className="text-xs text-gray-700">{user._id}</span>
           </p>
         </div>
@@ -58,18 +58,18 @@ const UserProfile = () => {
       {/* Edit Modal */}
       {editModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-80 space-y-4">
-            <h3 className="text-xl font-semibold text-gray-800">Update Username</h3>
+          <div className="bg-gray-900 p-6 rounded-lg shadow-lg w-80 space-y-4">
+            <h3 className="text-xl font-semibold text-gray-100">Update Username</h3>
             <input
               type="text"
               value={newUsername}
               onChange={(e) => setNewUsername(e.target.value)}
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-600 bg-gray-800 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setEditModalOpen(false)}
-                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600 text-white"
               >
                 Cancel
               </button>
@@ -87,13 +87,13 @@ const UserProfile = () => {
       {/* Delete Modal */}
       {deleteModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-80 space-y-4">
-            <h3 className="text-xl font-semibold text-gray-800">Confirm Deletion</h3>
-            <p className="text-gray-600">Are you sure you want to delete your account?</p>
+          <div className="bg-gray-900 p-6 rounded-lg shadow-lg w-80 space-y-4">
+            <h3 className="text-xl font-semibold text-gray-100">Confirm Deletion</h3>
+            <p className="text-gray-300">Are you sure you want to delete your account?</p>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setDeleteModalOpen(false)}
-                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600 text-white"
               >
                 Cancel
               </button>
