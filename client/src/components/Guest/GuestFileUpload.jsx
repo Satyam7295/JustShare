@@ -88,7 +88,7 @@ const GuestFileUpload = ({guestFiles, updateFiles}) => {
       if (response.data.message || response.data.message === "Files uploaded successfully!") {
         toast.success("Files uploaded successfully!");
         const newFiles = response.data.files;
-        const updatedFiles = [...guestFiles, ...newFiles];
+        const updatedFiles = [...(guestFiles || []), ...newFiles];
 
         updateFiles(updatedFiles); // ✅ directly update parent state and localStorage
         setFiles([]);
@@ -96,7 +96,7 @@ const GuestFileUpload = ({guestFiles, updateFiles}) => {
         // window.location.reload();
       }
     } catch (err) {
-      toast.error(err?.error || "Upload failed");
+      toast.error(err?.response?.data?.error || err?.response?.data?.message || err?.error || "Upload failed");
       setLoading(false);
     }
   };

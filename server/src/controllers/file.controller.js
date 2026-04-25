@@ -11,6 +11,8 @@ import path from "path";
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
+const bucketName = process.env.AWS_BUCKET_NAME || process.env.AWS_S3_BUCKET_NAME;
+
 
 
 const uploadFiles = async (req, res) => {
@@ -19,6 +21,10 @@ const uploadFiles = async (req, res) => {
   }
 
   const { isPassword, password, hasExpiry, expiresAt, userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required for upload' });
+  }
 
   try {
     const s3 = new AWS.S3({
@@ -38,7 +44,7 @@ const uploadFiles = async (req, res) => {
       const finalFileName = `${originalName.replace(/\s+/g, '_')}_${uniqueSuffix}${extension}`;
 
       const params = {
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: bucketName,
         Key: `file-share-app/${finalFileName}`,
         Body: file.buffer,
         ContentType: file.mimetype,
@@ -87,7 +93,7 @@ const uploadFiles = async (req, res) => {
     });
   } catch (error) {
     console.error("Upload error:", error);
-    res.status(500).json({ message: "File upload failed" });
+    res.status(500).json({ error: error.message || "File upload failed" });
   }
 };
 
@@ -115,7 +121,7 @@ const uploadFilesGuest = async (req, res) => {
               const finalFileName = `${originalName.replace(/\s+/g, '_')}_${uniqueSuffix}${extension}`;
 
               const params = {
-                Bucket: process.env.AWS_BUCKET_NAME,
+                Bucket: bucketName,
                 Key: `file-share-app/${finalFileName}`,
                 Body: file.buffer,
                 ContentType: file.mimetype,
@@ -172,7 +178,7 @@ const uploadFilesGuest = async (req, res) => {
             });
           } catch (error) {
             console.error("Upload error:", error);
-            res.status(500).json({ message: "File upload failed" });
+            res.status(500).json({ error: error.message || "File upload failed" });
           }
         };
 
@@ -203,7 +209,7 @@ const downloadInfo = async (req, res) => {
     });
 
     const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
+      Bucket: bucketName,
       Key: `file-share-app/${file.name}`,
       ResponseContentDisposition: `attachment; filename="${file.name}"` // 🟢 Force download
     };
@@ -268,7 +274,7 @@ const guestDownloadInfo = async (req, res) => {
     });
 
     const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
+      Bucket: bucketName,
       Key: `file-share-app/${file.name}`,
       ResponseContentDisposition: `attachment; filename="${file.name}"`
     };
@@ -341,7 +347,7 @@ const downloadFile = async (req, res) => {
 
     const key = `file-share-app/${file.name}`;
     const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
+      Bucket: bucketName,
       Key: key,
       Expires: 24 * 60 * 60,
     };
@@ -392,7 +398,7 @@ const deleteFile = async (req, res) => {
         })
 
         const params={
-          Bucket: process.env.AWS_BUCKET_NAME,
+          Bucket: bucketName,
           Key: `file-share-app/${file.name}`
         }
 

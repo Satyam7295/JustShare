@@ -61,9 +61,15 @@ const FileUploader = () => {
       return;
     }
 
+    const userId = user?._id || user?.id;
+    if (!userId) {
+      toast.error("Please sign in again before uploading files.");
+      return;
+    }
+
     const formData = new FormData();
     files.forEach((file) => formData.append("files", file));
-    formData.append("userId", user._id ? user._id : user.id);
+    formData.append("userId", userId);
     formData.append("hasExpiry", enableExpiry);
 
     if (enableExpiry && expiryDate) {
@@ -84,7 +90,7 @@ const FileUploader = () => {
       setFiles([]);
       window.location.reload();
     } catch (err) {
-      toast.error(err?.error || "Upload failed");
+      toast.error(err?.error || err?.message || "Upload failed");
     }
   };
 

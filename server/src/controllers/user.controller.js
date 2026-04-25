@@ -59,7 +59,16 @@ const username = `${cleanedFullname.substring(0, 4).toLowerCase()}${generateUniq
     });
 
     await newUser.save();
-    return res.status(201).json({ message: "User registered successfully." });
+    return res.status(201).json({
+      message: "User registered successfully.",
+      user: {
+        id: newUser._id,
+        fullname: newUser.fullname,
+        username: newUser.username,
+        email: newUser.email,
+        profilePic: newUser.profilePic,
+      },
+    });
   } catch (error) {
     console.error("Error during registration:", error);
     return res.status(500).json({ message: "Error during registration" });
