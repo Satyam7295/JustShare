@@ -60,10 +60,10 @@
 
 /* Browse Button */
 .browse-btn {
-  background-color: #1890ff;
-  color: #fff;
+  background-color: #1c1c1e;
+  color: #f5f5f5;
+  border: 1px solid #2c2c2e;
   padding: 8px 16px;
-  border: none;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
@@ -71,7 +71,7 @@
 }
 
 .browse-btn:hover {
-  background-color: #147dd8;
+  background-color: #2c2c2e;
 }
 
 .dropbox input[type="file"] {
@@ -385,29 +385,26 @@
 }
 
 .upload-btn {
-  background-color: #4f46e5; /* Indigo-600 */
-  color: white;
-  border: none;
+  background-color: #1c1c1e;
+  color: #f5f5f5;
+  border: 1px solid #2c2c2e;
   padding: 12px 30px;
   font-size: 16px;
   font-weight: 600;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+  transition: background-color 0.2s ease;
 }
 
 .upload-btn:hover {
-  background-color: #4338ca; /* Indigo-700 */
-  transform: scale(1.03);
+  background-color: #2c2c2e;
 }
 
 .upload-btn:disabled {
-  background-color: #cbd5e1; /* Gray-300 */
-  color: #64748b; /* Gray-500 */
+  background-color: #111111;
+  color: #64748b;
   cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
+  border-color: #262626;
 }
 
 .preview-video {

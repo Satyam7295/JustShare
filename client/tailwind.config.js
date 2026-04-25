@@ -4,32 +4,41 @@ export default {
   darkMode: ['class', '[data-mode="dark"]'], // use dark mode from [data-mode]
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'SF Pro Display', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+      },
       colors: {
-        pinkTheme: {
-          bg: '#ffe4e6',
-          text: '#be123c',
+        primary: {
+          DEFAULT: '#6b7280', // muted gray
+          dark: '#4b5563',
+          light: '#9ca3af',
         },
-        blueTheme: {
-          bg: '#e0f2fe',
-          text: '#1e40af',
+        accent: {
+          DEFAULT: '#3b82f6', // soft blue
+          muted: '#1e3a8a',
         },
-        greenTheme: {
-          bg: '#dcfce7',
-          text: '#166534',
+        dark: {
+          bg: '#0a0a0a',
+          surface: '#111111',
+          border: '#1a1a1a',
         },
-        purpleTheme: {
-          bg: '#ede9fe',
-          text: '#6b21a8',
-        }
       },
       animation: {
-        float: 'float 6s ease-in-out infinite',
+        'fade-in': 'fadeIn 0.5s ease-out forwards',
+        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
       },
       keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
-          '50%': { transform: 'translateY(-20px) rotate(180deg)' },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
         },
+        slideUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      boxShadow: {
+        subtle: '0 4px 20px rgba(0, 0, 0, 0.3)',
       },
     },
   },

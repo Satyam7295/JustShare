@@ -47,83 +47,68 @@ const Login = () => {
     }
   }
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 flex justify-center">
-      <div className="m-0 sm:m-12 bg-gray-800 shadow sm:rounded-lg flex justify-center flex-1">
-        <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-          <div>
-            {/* <img
-              src="https://storage.googleapis.com/devitary-image-host.appspot.com/15846435184459982716-LogoMakr_7POjrN.png"
-              className="w-32 mx-auto"
-              alt="Logo"
-            /> */}
-          </div>
-          <div className="mt-12 flex flex-col items-center">
-            <h1 className="text-2xl xl:text-3xl font-extrabold text-white">
-              Login to justshare 
-            </h1>
-            <div className="w-full flex-1 mt-8">
-              <div className="mx-auto max-w-xs">
-               
-                <input
-                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-700 border border-gray-600 placeholder-gray-400 text-white text-sm focus:outline-none focus:border-gray-500 focus:bg-gray-600 mt-5"
-                  type="email"
-                  name="email"
-                  onChange={handleChange}
-                  value={formData.email}
-                  placeholder="Email"
-                />
-                <input
-                  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-700 border border-gray-600 placeholder-gray-400 text-white text-sm focus:outline-none focus:border-gray-500 focus:bg-gray-600 mt-5"
-                  type="password"
-                  name="password"
-                  onChange={handleChange}
-                  value={formData.password}
-                  placeholder="Password"
-                />
-                <button
-                  className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-                  onClick={handleSubmit}
-                  disabled={loading}
-                >
-                  <svg
-                    className="w-6 h-6 -ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                    <circle cx="8.5" cy="7" r="4" />
-                    <path d="M20 8v6M23 11h-6" />
-                  </svg>
-                  <span className="ml-3">{loading ? "Logging..." : "Login"}</span>
-                </button>
-                <p className="mt-6 text-xs text-gray-300 text-center">
-                   Don't have an account?{' '}
-                  <a
-                    href="/signup"
-                    className="border-b border-gray-500 border-dotted text-primary hover:text-primary font-semibold"
-                  >
-                    Sign Up
-                  </a>
-                 
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden text-[var(--text-color)] pt-16">
+      {/* Removed glass blurs */}
 
-        {/* Right Side Image Section */}
-        <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
-          <div
-            className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
-            style={{
-              backgroundImage:
-                "url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg')",
-            }}
-          ></div>
+      <div className="glass-panel w-full max-w-md p-8 sm:p-12 animate-slide-up relative">
+        <div className="text-center mb-10 mt-4">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+            Welcome Back
+          </h1>
+          <p className="text-gray-400 mt-2 font-medium">Log in to your account</p>
+        </div>
+        
+        <div className="space-y-6">
+          <input
+            className="w-full px-4 py-3.5 rounded-xl font-medium bg-white dark:bg-[#1a1a1c] border border-gray-200 dark:border-[#2c2c2e] placeholder-gray-500 text-gray-900 dark:text-gray-200 text-sm focus:outline-none focus:border-blue-500/50 transition-all"
+            type="email"
+            name="email"
+            onChange={handleChange}
+            value={formData.email}
+            placeholder="Email Address"
+          />
+          <input
+            className="w-full px-4 py-3.5 rounded-xl font-medium bg-white dark:bg-[#1a1a1c] border border-gray-200 dark:border-[#2c2c2e] placeholder-gray-500 text-gray-900 dark:text-gray-200 text-sm focus:outline-none focus:border-blue-500/50 transition-all"
+            type="password"
+            name="password"
+            onChange={handleChange}
+            value={formData.password}
+            placeholder="Password"
+          />
+          <button
+            className="btn-primary w-full py-3.5 rounded-xl flex items-center justify-center gap-3 mt-4 text-sm"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                 <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                Logging in...
+              </span>
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                  <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                  <circle cx="8.5" cy="7" r="4" />
+                  <path d="M20 8v6M23 11h-6" />
+                </svg>
+                Log In
+              </>
+            )}
+          </button>
+          
+          <p className="mt-8 text-sm text-gray-400 text-center font-medium">
+            Don't have an account?{' '}
+            <a
+              href="/signup"
+              className="text-blue-400 hover:text-blue-300 transition-colors"
+            >
+              Sign Up
+            </a>
+          </p>
         </div>
       </div>
     </div>

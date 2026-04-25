@@ -13,7 +13,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
     <BrowserRouter>
     <App />
-    <ToastContainer position="top-right" autoClose={3000} />
+    <ToastContainer 
+      position="bottom-right" 
+      autoClose={3000} 
+      theme="dark"
+      hideProgressBar={true}
+      closeButton={false}
+      toastClassName="glass-toast"
+    />
     </BrowserRouter>
     </Provider>
     

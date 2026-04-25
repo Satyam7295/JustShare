@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { formatDistanceToNowStrict, differenceInDays } from "date-fns";
 import {
@@ -133,40 +134,40 @@ const GuestFilePreview = ({ guestFiles }) => {
         </p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-4 w-full lg:items-center mb-4">
+      <div className="flex flex-col lg:flex-row gap-4 w-full lg:items-center mb-6">
         <div className="relative flex-1">
-          <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-text)]"
-            placeholder="Search by file name"
+            className="pl-11 pr-4 py-3 w-full rounded-xl font-medium bg-white/5 border border-white/10 placeholder-gray-500 text-[var(--text-color)] text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+            placeholder="Search by file name..."
             aria-label="Search"
           />
         </div>
 
         <select
-          className="px-3 py-2 border border-gray-600 bg-gray-700 rounded-lg text-gray-100"
+          className="px-4 py-3 rounded-xl font-medium bg-white/5 border border-white/10 text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all outline-none cursor-pointer"
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
         >
-          <option value="">All Types</option>
+          <option value="" className="bg-gray-900 text-white">All Types</option>
           {[...new Set(files?.map((f) => f.type))].map((type) => (
-            <option key={type} value={type}>
+            <option key={type} value={type} className="bg-gray-900 text-white">
               {type}
             </option>
           ))}
         </select>
 
         <select
-          className="px-3 py-2 border border-gray-600 bg-gray-700 rounded-lg text-gray-100"
+          className="px-4 py-3 rounded-xl font-medium bg-white/5 border border-white/10 text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all outline-none cursor-pointer"
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
         >
-          <option value="">All Status</option>
-          <option value="active">Active</option>
-          <option value="expired">Expired</option>
+          <option value="" className="bg-gray-900 text-white">All Status</option>
+          <option value="active" className="bg-gray-900 text-white">Active</option>
+          <option value="expired" className="bg-gray-900 text-white">Expired</option>
         </select>
 
         {(filterType || filterStatus || searchTerm) && (
@@ -176,7 +177,7 @@ const GuestFilePreview = ({ guestFiles }) => {
               setFilterType("");
               setFilterStatus("");
             }}
-            className="px-3 py-2 bg-red-100 text-red-500 rounded hover:bg-red-200"
+            className="px-5 py-3 bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl hover:bg-red-500/20 transition-all text-sm font-semibold tracking-wide"
           >
             Reset
           </button>
@@ -184,31 +185,24 @@ const GuestFilePreview = ({ guestFiles }) => {
       </div>
 
       {!files || files.length === 0 ? (
-        <p className="text-gray-300">No files uploaded yet.</p>
+        <div className="flex flex-col items-center justify-center p-12 text-center glass-panel mt-4">
+          <p className="text-gray-400 text-lg">No files uploaded yet.</p>
+        </div>
       ) : (
         <div className="-my-2 overflow-x-auto">
           <div className="inline-block min-w-full py-2 align-middle">
-            <div className="overflow-hidden border border-[var(--border-color)] rounded-md shadow-md">
-              <table className="min-w-full divide-y divide-[var(--border-color)] text-[var(--text-color)]">
-                <thead className="bg-[var(--primary-text)] text-[var(--text-on-primary)] hidden md:table-header-group">
+            <div className="glass-panel overflow-hidden border border-white/10 shadow-lg">
+              <table className="min-w-full divide-y divide-white/10 text-[var(--text-color)]">
+                <thead className="bg-white/5 text-gray-300 hidden md:table-header-group">
                   <tr>
-                    {[
-                      "File Name",
-                      "Size",
-                      "Type",
-                      "Download",
-                      "Status",
-                      "Actions",
-                      "Expiry At",
-                      "Uploaded At",
-                    ].map((heading) => (
-                      <th
-                        key={heading}
-                        className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                      >
-                        {heading}
-                      </th>
-                    ))}
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">File Name</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Size</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider hidden lg:table-cell">Type</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider hidden xl:table-cell">Download</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Status</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Actions</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider hidden md:table-cell">Expiry At</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider hidden lg:table-cell">Uploaded At</th>
                   </tr>
                 </thead>
 
@@ -233,19 +227,19 @@ const GuestFilePreview = ({ guestFiles }) => {
                           key={file._id}
                           className="hover:bg-[var(--hover-bg-color)] hidden md:table-row"
                         >
-                          <td className="px-6 py-4 text-sm">
+                          <td className="px-4 py-3 text-sm max-w-[150px] truncate" title={file.name}>
                             {sortFileName(file.name)}
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-400">
+                          <td className="px-4 py-3 text-sm text-gray-400 whitespace-nowrap">
                             {formattedSize}
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-400">
+                          <td className="px-4 py-3 text-sm text-gray-400 hidden lg:table-cell max-w-[100px] truncate" title={file.type}>
                             {file.type}
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-400">
+                          <td className="px-4 py-3 text-sm text-gray-400 hidden xl:table-cell">
                             {file.downloadedContent}
                           </td>
-                          <td className="px-6 py-4 text-sm">
+                          <td className="px-4 py-3 text-sm whitespace-nowrap">
                             <span
                               className={`font-medium ${
                                 file.status === "active"
@@ -256,32 +250,31 @@ const GuestFilePreview = ({ guestFiles }) => {
                               {file.status}
                             </span>
                           </td>
-                          <td className="px-6 py-4 flex gap-2 mt-2 text-sm space-x-3">
+                          <td className="px-4 py-3 flex items-center gap-2 text-sm whitespace-nowrap">
                             <button
                               onClick={() => setPreviewFile(file)}
-                              className="flex items-center gap-1 px-3 py-1 text-sm text-blue-600 border border-blue-500 rounded hover:bg-blue-50 transition"
+                              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-[#1a1a1c] border border-gray-200 dark:border-[#2c2c2e] rounded-lg hover:bg-gray-50 dark:hover:bg-[#2c2c2e] transition-colors"
                             >
-                              <FaEye /> Preview
+                              <FaEye className="text-gray-500 dark:text-gray-400" /> Preview
                             </button>
 
                             {/* Share */}
                             <button
                               onClick={() => setShareFile(file)}
-                              className="flex items-center gap-1 px-3 py-1 text-sm text-purple-600 border border-purple-500 rounded hover:bg-purple-50 transition"
+                              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-[#1a1a1c] border border-gray-200 dark:border-[#2c2c2e] rounded-lg hover:bg-gray-50 dark:hover:bg-[#2c2c2e] transition-colors"
                             >
-                              <FaShare /> Share
+                              <FaShare className="text-gray-500 dark:text-gray-400" /> Share
                             </button>
 
                             {/* Delete */}
                             <button
                               onClick={() => deleteFile(file.id)}
-                              className="flex items-center gap-1 px-3 py-1 text-sm text-red-600 border border-red-500 rounded hover:bg-red-50 transition"
+                              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 bg-white dark:bg-[#1a1a1c] border border-gray-200 dark:border-[#2c2c2e] rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                             >
-                              <FaTrashAlt /> Delete
+                              <FaTrashAlt className="text-red-500 dark:text-red-400/80" /> Delete
                             </button>
-                            <br />
                           </td>
-                          <td className="px-6 py-4 text-sm text-red-500">
+                          <td className="px-4 py-3 text-sm text-red-500 whitespace-nowrap hidden md:table-cell">
                             {isExpired
                               ? "Expired"
                               : `Expires in ${differenceInDays(
@@ -289,8 +282,7 @@ const GuestFilePreview = ({ guestFiles }) => {
                                   new Date()
                                 )} days`}
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-400">
-                            Uploaded{" "}
+                          <td className="px-4 py-3 text-sm text-gray-400 hidden lg:table-cell whitespace-nowrap">
                             {formatDistanceToNowStrict(
                               new Date(file.createdAt),
                               {
@@ -340,33 +332,34 @@ const GuestFilePreview = ({ guestFiles }) => {
                                   )} days`}
                             </div>
                             <div className="text-sm text-gray-400 mb-1">
-                                  addSuffix: true,
-                                }
-                              )}
+                              <span className="font-medium">Uploaded:</span>{" "}
+                              {formatDistanceToNowStrict(new Date(file.createdAt), {
+                                addSuffix: true,
+                              })}
                             </div>
 
-                            <div className="flex flex-wrap gap-4 mt-3">
+                            <div className="flex flex-wrap gap-3 mt-3">
                              <button
                               onClick={() => setPreviewFile(file)}
-                              className="flex items-center gap-1 px-3 py-1 text-sm text-blue-600 border border-blue-500 rounded hover:bg-blue-50 transition"
+                              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-[#1a1a1c] border border-gray-200 dark:border-[#2c2c2e] rounded-lg hover:bg-gray-50 dark:hover:bg-[#2c2c2e] transition-colors"
                             >
-                              <FaEye /> Preview
+                              <FaEye className="text-gray-500 dark:text-gray-400" /> Preview
                             </button>
 
                             {/* Share */}
                             <button
                               onClick={() => setShareFile(file)}
-                              className="flex items-center gap-1 px-3 py-1 text-sm text-purple-600 border border-purple-500 rounded hover:bg-purple-50 transition"
+                              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-[#1a1a1c] border border-gray-200 dark:border-[#2c2c2e] rounded-lg hover:bg-gray-50 dark:hover:bg-[#2c2c2e] transition-colors"
                             >
-                              <FaShare /> Share
+                              <FaShare className="text-gray-500 dark:text-gray-400" /> Share
                             </button>
 
                             {/* Delete */}
                             <button
                               onClick={() => deleteFile(file.id)}
-                              className="flex items-center gap-1 px-3 py-1 text-sm text-red-600 border border-red-500 rounded hover:bg-red-50 transition"
+                              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-600 dark:text-red-400 bg-white dark:bg-[#1a1a1c] border border-gray-200 dark:border-[#2c2c2e] rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                             >
-                              <FaTrashAlt /> Delete
+                              <FaTrashAlt className="text-red-500 dark:text-red-400/80" /> Delete
                             </button>
                             </div>
                           </td>
@@ -405,18 +398,18 @@ const GuestFilePreview = ({ guestFiles }) => {
               </div>
             )}
           </div>
-          <p className="text-gray-800 mt-6 text-center text-sm">
+          <p className="text-gray-600 dark:text-gray-400 mt-6 text-center text-sm">
   Want to save your progress?{" "}
   <Link
     to="/login"
-    className="text-blue-600 font-medium hover:underline hover:text-blue-800 transition-colors duration-200"
+    className="text-blue-600 dark:text-blue-400 font-medium hover:underline hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-200"
   >
     Log in
   </Link>{" "}
   or{" "}
   <Link
     to="/signup"
-    className="text-blue-600 font-medium hover:underline hover:text-blue-800 transition-colors duration-200"
+    className="text-blue-600 dark:text-blue-400 font-medium hover:underline hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-200"
   >
     Create an account
   </Link>
@@ -426,113 +419,125 @@ const GuestFilePreview = ({ guestFiles }) => {
       )}
 
       {/* Preview Modal */}
-      {previewFile && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 dark:bg-gray-900 p-6 rounded shadow-lg max-w-2xl w-full">
-            <h3 className="text-lg font-bold mb-2">{previewFile.name}</h3>
+      {previewFile && createPortal(
+        <div className="fixed inset-0 bg-white/80 dark:bg-black/90 flex items-start justify-center z-[9999] p-4 pt-20 sm:pt-28 animate-fade-in overflow-y-auto">
+          <div className="glass-panel p-6 max-w-2xl w-full animate-slide-up relative">
+            <button 
+              onClick={() => setPreviewFile(null)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+            >
+              &times;
+            </button>
+            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-[var(--primary-text)] pr-6 truncate">{previewFile.name}</h3>
             {/* File Preview */}
-            {previewFile.type.startsWith("image/") && (
-              <img
-                src={previewFile.path}
-                alt={previewFile.name}
-                className="w-full h-auto rounded mb-4"
-              />
-            )}
-            {previewFile.type.startsWith("video/") && (
-              <video controls className="w-full h-auto rounded mb-4">
-                <source src={previewFile.path} type={previewFile.type} />
-                Your browser does not support the video tag.
-              </video>
-            )}
-            {previewFile.type.startsWith("audio/") && (
-              <audio controls className="w-full h-auto rounded mb-4">
-                <source src={previewFile.path} type={previewFile.type} />
-                Your browser does not support the audio element.
-              </audio>
-            )}
-            {previewFile.type === "application/pdf" && (
-              <iframe
-                src={previewFile.path}
-                title="PDF Preview"
-                className="w-full h-[400px] rounded mb-4"
-              ></iframe>
-            )}
-            <div className="mt-4 text-right">
-              <button
-                onClick={() => setPreviewFile(null)}
-                className="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700"
-              >
-                Close
-              </button>
+            <div className="rounded-xl overflow-hidden bg-gray-100 dark:bg-black/20 border border-gray-200 dark:border-white/5 p-2">
+              {previewFile.type.startsWith("image/") && (
+                <img
+                  src={previewFile.path}
+                  alt={previewFile.name}
+                  className="w-full h-auto rounded-lg object-contain max-h-[60vh]"
+                />
+              )}
+              {previewFile.type.startsWith("video/") && (
+                <video controls className="w-full h-auto rounded-lg max-h-[60vh]">
+                  <source src={previewFile.path} type={previewFile.type} />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+              {previewFile.type.startsWith("audio/") && (
+                <audio controls className="w-full h-auto rounded-lg">
+                  <source src={previewFile.path} type={previewFile.type} />
+                  Your browser does not support the audio element.
+                </audio>
+              )}
+              {previewFile.type === "application/pdf" && (
+                <iframe
+                  src={previewFile.path}
+                  title="PDF Preview"
+                  className="w-full h-[60vh] rounded-lg bg-white"
+                ></iframe>
+              )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Share Modal */}
-      {shareFile && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 dark:bg-[--bg-color] p-6 rounded shadow-lg w-full max-w-md md:max-w-2xl">
-            <h3 className="text-lg font-bold mb-4 text-center">
-              Share "{shareFile?.name}"
+      {shareFile && createPortal(
+        <div className="fixed inset-0 bg-white/80 dark:bg-black/90 flex items-start justify-center z-[9999] p-4 pt-20 sm:pt-28 animate-fade-in overflow-y-auto">
+          <div className="glass-panel p-5 sm:p-6 max-w-lg w-full animate-slide-up relative">
+            <button 
+              onClick={() => setShareFile(null)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl transition-colors"
+            >
+              &times;
+            </button>
+            <div className="flex justify-center mb-2">
+              <img src="/filetransfergif.gif" alt="Share animation" className="w-16 h-16 object-contain opacity-90 dark:opacity-80" />
+            </div>
+            <h3 className="text-2xl font-bold mb-4 text-center text-gray-900 dark:text-white truncate px-4">
+              Share File
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[var(--text-color)]">
+            <div className="grid grid-cols-2 gap-3 text-[var(--text-color)]">
               <a
                 href={handleShare(shareFile.shortUrl).whatsapp}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 p-4 border rounded hover:shadow transition"
+                className="flex items-center justify-center gap-2 p-3 border border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 hover:border-green-500/50 transition-all group"
               >
-                <FaWhatsapp className="text-green-500 text-2xl" />
-                <span className="font-semibold">WhatsApp</span>
+                <FaWhatsapp className="text-green-500 text-xl group-hover:scale-110 transition-transform" />
+                <span className="font-semibold text-sm">WhatsApp</span>
               </a>
 
               <a
                 href={handleShare(shareFile.shortUrl).instagram || "#"}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 p-4 border rounded hover:shadow transition"
+                className="flex items-center justify-center gap-2 p-3 border border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 hover:border-pink-500/50 transition-all group"
               >
-                <FaInstagram className="text-pink-500 text-2xl" />
-                <span className="font-semibold">Instagram</span>
+                <FaInstagram className="text-pink-500 text-xl group-hover:scale-110 transition-transform" />
+                <span className="font-semibold text-sm">Instagram</span>
               </a>
 
               <a
                 href={handleShare(shareFile.shortUrl).telegram}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 p-4 border rounded hover:shadow transition"
+                className="flex items-center justify-center gap-2 p-3 border border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 hover:border-blue-500/50 transition-all group"
               >
-                <FaTelegramPlane className="text-blue-500 text-2xl" />
-                <span className="font-semibold ">Telegram</span>
+                <FaTelegramPlane className="text-blue-500 text-xl group-hover:scale-110 transition-transform" />
+                <span className="font-semibold text-sm">Telegram</span>
               </a>
 
               <a
                 href={handleShare(shareFile.shortUrl).email}
-                className="flex items-center gap-3 p-4 border rounded hover:shadow transition"
+                className="flex items-center justify-center gap-2 p-3 border border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 hover:border-red-500/50 transition-all group"
               >
-                <FaEnvelope className="text-red-500 text-2xl" />
-                <span className="font-semibold">Email</span>
+                <FaEnvelope className="text-red-500 text-xl group-hover:scale-110 transition-transform" />
+                <span className="font-semibold text-sm">Email</span>
               </a>
             </div>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                QR Code:
+            <div className="mt-5 pt-4 border-t border-gray-200 dark:border-white/10 text-center">
+              <p className="text-sm font-medium text-gray-400 mb-3">
+                Or share via QR Code
               </p>
-              <img
-                src={handleShare(shareFile.shortUrl).qr}
-                alt="QR Code"
-                className="mx-auto border rounded w-32 h-32"
-              />
-              <div className="flex flex-col items-center mt-4">
+              <div className="bg-white p-2 rounded-xl inline-block shadow-lg mx-auto">
+                <img
+                  src={handleShare(shareFile.shortUrl).qr}
+                  alt="QR Code"
+                  className="w-24 h-24 rounded-lg"
+                />
+              </div>
+              <div className="flex flex-row justify-center gap-3 mt-4">
                 <button
                   onClick={() => downloadQRCode(shareFile.shortUrl)}
-                  className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-500 rounded hover:bg-blue-200 transition"
+                  className="flex-1 inline-flex justify-center items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white rounded-xl transition-all"
                 >
-                  <FaDownload className="text-blue-500 text-2xl" />
-                  <span className="font-semibold">Download QR Code</span>
+                  <FaDownload className="text-blue-400 text-lg" />
+                  <span className="font-medium text-sm">Save QR</span>
                 </button>
 
                 <button
@@ -542,24 +547,16 @@ const GuestFilePreview = ({ guestFiles }) => {
                     );
                     toast.success("Link copied to clipboard!");
                   }}
-                  className="mt-2 inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-500 rounded hover:bg-blue-200 transition"
+                  className="flex-1 inline-flex justify-center items-center gap-2 px-4 py-2.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 text-white rounded-xl transition-all"
                 >
-                  <FaDownload className="text-blue-500 text-2xl" />
-                  <span className="font-semibold">Copy Link</span>
+                  <FaShare className="text-blue-400 text-lg" />
+                  <span className="font-medium text-sm">Copy Link</span>
                 </button>
               </div>
             </div>
-
-            <div className="mt-6 text-center">
-              <button
-                onClick={() => setShareFile(null)}
-                className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-900"
-              >
-                Close
-              </button>
-            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
