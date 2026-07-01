@@ -96,7 +96,13 @@ const GuestFileUpload = ({guestFiles, updateFiles}) => {
         // window.location.reload();
       }
     } catch (err) {
-      toast.error(err?.response?.data?.error || err?.response?.data?.message || err?.error || "Upload failed");
+      toast.error(
+        err?.response?.data?.error ||
+          err?.response?.data?.message ||
+          err?.error ||
+          err?.message ||
+          "Upload failed"
+      );
       setLoading(false);
     }
   };

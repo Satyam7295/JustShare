@@ -5,8 +5,18 @@ import { deleteFile, downloadInfo, downloadFile, generateQR, generateShareShorte
 
 const router=Router();
 
-router.post("/upload", upload.array('files'), uploadFiles);
-router.post("/upload-guest", upload.array('files'), uploadFilesGuest);
+const handleUpload = (uploadMiddleware, handler) => [
+  (req, res, next) => {
+    uploadMiddleware(req, res, (err) => {
+      if (err) return next(err);
+      next();
+    });
+  },
+  handler,
+];
+
+router.post("/upload", ...handleUpload(upload.array("files"), uploadFiles));
+router.post("/upload-guest", ...handleUpload(upload.array("files"), uploadFilesGuest));
 
 router.get("/download/:fileId",downloadFile);
 router.delete("/delete/:fileId",deleteFile);

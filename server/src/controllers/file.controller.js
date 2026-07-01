@@ -26,6 +26,14 @@ const uploadFiles = async (req, res) => {
     return res.status(400).json({ error: 'User ID is required for upload' });
   }
 
+  if (isPassword === 'true' && !password) {
+    return res.status(400).json({ error: 'Password is required when password protection is enabled' });
+  }
+
+  if (!bucketName) {
+    return res.status(500).json({ error: 'S3 bucket is not configured on the server' });
+  }
+
   try {
     const s3 = new AWS.S3({
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -103,6 +111,14 @@ const uploadFilesGuest = async (req, res) => {
       }
 
       const {isPassword,password,hasExpiry,expiresAt} = req.body;
+
+      if (isPassword === 'true' && !password) {
+        return res.status(400).json({ error: 'Password is required when password protection is enabled' });
+      }
+
+      if (!bucketName) {
+        return res.status(500).json({ error: 'S3 bucket is not configured on the server' });
+      }
 
       try {
            const s3 = new AWS.S3({
@@ -381,7 +397,7 @@ const deleteFile = async (req, res) => {
      const { fileId } = req.params;
 
      try {
-        const file=await file.findById(fileId);
+        const file = await File.findById(fileId);
 
         if(!file){
           return res.status(404).json({error:'File not found'});

@@ -90,7 +90,13 @@ const FileUploader = () => {
       setFiles([]);
       window.location.reload();
     } catch (err) {
-      toast.error(err?.error || err?.message || "Upload failed");
+      toast.error(
+        err?.error ||
+          err?.response?.data?.error ||
+          err?.response?.data?.message ||
+          err?.message ||
+          "Upload failed"
+      );
     }
   };
 

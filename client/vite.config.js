@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api/files': 'http://localhost:6600',
+      '/api': process.env.VITE_PROXY_TARGET || 'http://localhost:6600',
     },
   },
 })

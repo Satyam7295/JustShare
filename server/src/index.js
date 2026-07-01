@@ -4,16 +4,18 @@ import connectDB from "./db/index.js"
 import fileRoutes from "./routes/file.routes.js"
 import userRoutes from "./routes/user.routes.js"
 import path from 'path';
+import { fileURLToPath } from 'url';
 const __dirname = path.resolve();
 
 import express from "express"
 import cors from "cors"
 import { File } from "./models/file.models.js";
 
+const __filename = fileURLToPath(import.meta.url);
+const moduleDir = path.dirname(__filename);
+dotenv.config({ path: path.resolve(moduleDir, "../.env") });
 
-dotenv.config();
-
-const PORT=process.env.PORT || 5600;
+const PORT=process.env.PORT || 6600;
 
       
 const startServer = async () => {
