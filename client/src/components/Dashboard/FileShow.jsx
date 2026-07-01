@@ -4,6 +4,7 @@ import { getUserFiles } from "../../redux/slice/file/fileThunk";
 import { formatDistanceToNowStrict, differenceInDays } from "date-fns";
 import { FaWhatsapp, FaTelegramPlane, FaInstagram, FaEnvelope, FaHeadset,FaDownload } from "react-icons/fa"
 import { toast } from "react-toastify";
+import FilePreview from "./FilePreview";
 
 const FileShow = () => {
   const dispatch = useDispatch();
@@ -406,25 +407,7 @@ const paginatedFiles = filteredFiles?.slice(
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-gray-800 dark:bg-gray-900 p-6 rounded shadow-lg max-w-2xl w-full">
             <h3 className="text-lg font-bold mb-2">{previewFile.name}</h3>
-              {/* File Preview */}
-          {previewFile.type.startsWith("image/") && (
-            <img src={previewFile.path} alt={previewFile.name} className="w-full h-auto rounded mb-4" />
-          )}
-          {previewFile.type.startsWith("video/") && (
-            <video controls className="w-full h-auto rounded mb-4">
-              <source src={previewFile.path} type={previewFile.type} />
-              Your browser does not support the video tag.
-            </video>
-          )}
-          {previewFile.type.startsWith("audio/") && (
-            <audio controls className="w-full h-auto rounded mb-4">
-              <source src={previewFile.path} type={previewFile.type} />
-              Your browser does not support the audio element.
-            </audio>
-          )}
-          {previewFile.type === "application/pdf" && (
-            <iframe src={previewFile.path} title="PDF Preview" className="w-full h-[400px] rounded mb-4"></iframe>
-          )}
+            <FilePreview file={previewFile} />
             <div className="mt-4 text-right">
               <button
                 onClick={() => setPreviewFile(null)}

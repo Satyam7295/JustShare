@@ -13,6 +13,8 @@ import {
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { FaEye, FaShare, FaTrashAlt } from "react-icons/fa";
+import FilePreview from "../Dashboard/FilePreview";
+import axiosInstance from "../../config/axiosInstance";
 
 const GuestFilePreview = ({ guestFiles }) => {
   const dispatch = useDispatch();
@@ -75,7 +77,30 @@ const GuestFilePreview = ({ guestFiles }) => {
   };
 
   useEffect(() => {
-    setFiles(guestFiles);
+    const hydrateGuestFiles = async () => {
+      const nextFiles = await Promise.all(
+        (guestFiles || []).map(async (file) => {
+          if (file.downloadUrl || !file.shortUrl) {
+            return file;
+          }
+
+          try {
+            const shortCode = file.shortUrl.replace(/^\/g\//, "");
+            const res = await axiosInstance.get(`/files/g/${shortCode}`);
+            return {
+              ...file,
+              downloadUrl: res.data.downloadUrl,
+            };
+          } catch {
+            return file;
+          }
+        })
+      );
+
+      setFiles(nextFiles);
+    };
+
+    hydrateGuestFiles();
   }, [guestFiles]);
 
 
@@ -429,35 +454,7 @@ const GuestFilePreview = ({ guestFiles }) => {
               &times;
             </button>
             <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-[var(--primary-text)] pr-6 truncate">{previewFile.name}</h3>
-            {/* File Preview */}
-            <div className="rounded-xl overflow-hidden bg-gray-100 dark:bg-black/20 border border-gray-200 dark:border-white/5 p-2">
-              {previewFile.type.startsWith("image/") && (
-                <img
-                  src={previewFile.path}
-                  alt={previewFile.name}
-                  className="w-full h-auto rounded-lg object-contain max-h-[60vh]"
-                />
-              )}
-              {previewFile.type.startsWith("video/") && (
-                <video controls className="w-full h-auto rounded-lg max-h-[60vh]">
-                  <source src={previewFile.path} type={previewFile.type} />
-                  Your browser does not support the video tag.
-                </video>
-              )}
-              {previewFile.type.startsWith("audio/") && (
-                <audio controls className="w-full h-auto rounded-lg">
-                  <source src={previewFile.path} type={previewFile.type} />
-                  Your browser does not support the audio element.
-                </audio>
-              )}
-              {previewFile.type === "application/pdf" && (
-                <iframe
-                  src={previewFile.path}
-                  title="PDF Preview"
-                  className="w-full h-[60vh] rounded-lg bg-white"
-                ></iframe>
-              )}
-            </div>
+            <FilePreview file={previewFile} />
           </div>
         </div>,
         document.body

@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "../../../config/axiosInstance";
+import FilePreview from "../../Dashboard/FilePreview";
 
 const GuestDownload = () => {
   const { shortCode } = useParams();
@@ -11,6 +12,12 @@ const GuestDownload = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isVerified, setIsVerified] = useState(false);
+  const previewFile = file
+    ? {
+        ...file,
+        previewUrl: file.previewUrl || file.downloadUrl,
+      }
+    : null;
 
   useEffect(() => {
   const controller = new AbortController();
@@ -107,26 +114,7 @@ const GuestDownload = () => {
       </p>
     </div>
   ) : (
-    <>
-      {file.type.startsWith("image/") && (
-        <img src={file.path} alt={file.name} className="w-full h-auto rounded mb-4" />
-      )}
-      {file.type.startsWith("video/") && (
-        <video controls className="w-full h-auto rounded mb-4">
-          <source src={file.path} type={file.type} />
-          Your browser does not support the video tag.
-        </video>
-      )}
-      {file.type.startsWith("audio/") && (
-        <audio controls className="w-full h-auto rounded mb-4">
-          <source src={file.path} type={file.type} />
-          Your browser does not support the audio element.
-        </audio>
-      )}
-      {file.type === "application/pdf" && (
-        <iframe src={file.path} title="PDF Preview" className="w-full h-[400px] rounded mb-4"></iframe>
-      )}
-    </>
+    <FilePreview file={previewFile} />
   )}
 </div>
 

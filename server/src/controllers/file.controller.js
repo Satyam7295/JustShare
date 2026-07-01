@@ -183,6 +183,11 @@ const uploadFilesGuest = async (req, res) => {
                 size: f.size,
                 type: f.type,
                 path: f.path,
+                downloadUrl: s3.getSignedUrl("getObject", {
+                  Bucket: bucketName,
+                  Key: `file-share-app/${f.name}`,
+                  Expires: 24 * 60 * 60,
+                }),
                 isPasswordProtected: f.isPasswordProtected,
                 expiresAt: f.expiresAt,
                 downloadedContent: f.downloadedContent,
@@ -232,6 +237,11 @@ const downloadInfo = async (req, res) => {
 
     const command = new GetObjectCommand(params);
     const downloadUrl = await getSignedUrl(s3, command, { expiresIn: 24 * 60 * 60 }); // 24 hours
+    const previewCommand = new GetObjectCommand({
+      Bucket: bucketName,
+      Key: `file-share-app/${file.name}`,
+    });
+    const previewUrl = await getSignedUrl(s3, previewCommand, { expiresIn: 24 * 60 * 60 });
 
     file.downloadedContent++;
     await file.save();
@@ -245,6 +255,7 @@ const downloadInfo = async (req, res) => {
 
     return res.status(200).json({
       downloadUrl,
+      previewUrl,
       id: file._id,
       name: file.name,
       size: file.size,
@@ -297,6 +308,11 @@ const guestDownloadInfo = async (req, res) => {
 
     const command = new GetObjectCommand(params);
     const downloadUrl = await getSignedUrl(s3, command, { expiresIn: 24 * 60 * 60 });
+    const previewCommand = new GetObjectCommand({
+      Bucket: bucketName,
+      Key: `file-share-app/${file.name}`,
+    });
+    const previewUrl = await getSignedUrl(s3, previewCommand, { expiresIn: 24 * 60 * 60 });
 
     file.downloadedContent++;
     await file.save();
@@ -304,6 +320,7 @@ const guestDownloadInfo = async (req, res) => {
 
     return res.status(200).json({
       downloadUrl,
+      previewUrl,
       id: file._id,
       name: file.name,
       size: file.size,
@@ -774,7 +791,27 @@ const getUserFiles = async (req, res) => {
       return res.status(404).json({ message: 'No files found' });
     }
 
-    return res.status(200).json(files);
+    const s3 = new AWS.S3({
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      region: process.env.AWS_REGION,
+    });
+
+    const filesWithPreviewUrls = files.map((file) => {
+      const key = `file-share-app/${file.name}`;
+      const downloadUrl = s3.getSignedUrl("getObject", {
+        Bucket: bucketName,
+        Key: key,
+        Expires: 24 * 60 * 60,
+      });
+
+      return {
+        ...file.toObject(),
+        downloadUrl,
+      };
+    });
+
+    return res.status(200).json(filesWithPreviewUrls);
 
   } catch (error) {
     console.error("List files error:", error);
