@@ -151,7 +151,7 @@ export const verifyFilePassword = createAsyncThunk("file/verifyPassword", async 
 export const getUserFiles = createAsyncThunk("file/getUserFiles", async (userId, { rejectWithValue }) => {
   try {
     console.log(userId);
-    const res = await axiosInstance.get(`files/getUserFiles/${userId}`);
+    const res = await axiosInstance.get(`/files/getUserFiles/${userId}`);
     return res.data;
   } catch (err) {
     return rejectWithValue(err.response?.data);

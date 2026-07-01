@@ -37,7 +37,7 @@ app.get('/f/:shortCode', async (req, res) => {
       console.log("Short code:", shortCode);
       // Handle the download logic here
       try {
-         const file=await File.findOne({ shortUrl: `${process.env.BASE_URL}/f/${shortCode}` });
+         const file = await File.findOne({ shortUrl: `/f/${shortCode}` });
           if (!file) {
             return res.status(404).send('File not found');
           }
