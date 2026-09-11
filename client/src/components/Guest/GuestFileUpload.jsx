@@ -21,11 +21,19 @@ const GuestFileUpload = ({guestFiles, updateFiles}) => {
   };
 
   const handleFiles = (fileList) => {
-    const newFiles = Array.from(fileList).filter(
-      (file) => file.size <= 10 * 1024 * 1024
-    );
-    setFiles((prev) => [...prev, ...newFiles]);
-    toast.success("File(s) added!");
+    const list = Array.from(fileList);
+    const validFiles = [];
+    for (const file of list) {
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error(`"${file.name}" exceeds the 10 MB size limit.`);
+        continue;
+      }
+      validFiles.push(file);
+    }
+    if (validFiles.length > 0) {
+      setFiles((prev) => [...prev, ...validFiles]);
+      toast.success(`${validFiles.length} file(s) added!`);
+    }
   };
 
   const handleFileInputChange = (e) => {
@@ -96,13 +104,14 @@ const GuestFileUpload = ({guestFiles, updateFiles}) => {
         // window.location.reload();
       }
     } catch (err) {
-      toast.error(
+      const errorMsg =
         err?.response?.data?.error ||
-          err?.response?.data?.message ||
-          err?.error ||
-          err?.message ||
-          "Upload failed"
-      );
+        err?.response?.data?.message ||
+        (typeof err?.response?.data === 'string' && !err.response.data.startsWith('<!') ? err.response.data : null) ||
+        err?.error ||
+        err?.message ||
+        "Upload failed";
+      toast.error(errorMsg);
       setLoading(false);
     }
   };
@@ -126,7 +135,7 @@ const GuestFileUpload = ({guestFiles, updateFiles}) => {
         <div className="dropbox-icon">📁</div>
         <div className="dropbox-text">Drop files here</div>
         <div className="dropbox-subtext">
-          Supported formats: JPG, PNG, PDF, MP4, MOV, AVI, MKV (Max 10MB)
+          Supported formats: Images, Videos, Audio, Documents, Archives (Max 10MB)
         </div>
         <button
           className="browse-btn"
@@ -141,7 +150,7 @@ const GuestFileUpload = ({guestFiles, updateFiles}) => {
           type="file"
           ref={fileInputRef}
           multiple
-          accept=".jpg,.jpeg,.webp,.png,.mp4,.avi,.mov,.mkv,.mk3d,.mks,.mka,.pdf"
+          accept=".jpg,.jpeg,.webp,.png,.gif,.svg,.bmp,.ico,.tiff,.mp4,.avi,.mov,.mkv,.mk3d,.mks,.mka,.webm,.flv,.wmv,.mp3,.wav,.ogg,.m4a,.aac,.flac,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.json,.md,.rtf,.zip,.rar,.7z,.tar,.gz"
           onChange={handleFileInputChange}
         />
       </div>

@@ -16,11 +16,13 @@ import { FaEye, FaShare, FaTrashAlt } from "react-icons/fa";
 import FilePreview from "../Dashboard/FilePreview";
 import axiosInstance from "../../config/axiosInstance";
 
-const GuestFilePreview = ({ guestFiles }) => {
+const GuestFilePreview = ({ guestFiles, updateFiles }) => {
   const dispatch = useDispatch();
   const [files, setFiles] = useState(guestFiles || []);
   const [previewFile, setPreviewFile] = useState(null);
   const [shareFile, setShareFile] = useState(null);
+  const [shareQrCode, setShareQrCode] = useState("");
+  const [qrLoading, setQrLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
@@ -28,6 +30,40 @@ const GuestFilePreview = ({ guestFiles }) => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    if (shareFile?.shortUrl) {
+      const fullUrl = `${window.location.origin}${shareFile.shortUrl}`;
+      setQrLoading(true);
+      setShareQrCode("");
+      axiosInstance
+        .get(`/qr?data=${encodeURIComponent(fullUrl)}`)
+        .then((res) => {
+          if (res.data?.qrCode) {
+            setShareQrCode(res.data.qrCode);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to generate QR code:", err);
+          toast.error("Failed to load QR code");
+        })
+        .finally(() => {
+          setQrLoading(false);
+        });
+    } else {
+      setShareQrCode("");
+    }
+  }, [shareFile]);
+
+  const downloadQRCode = () => {
+    if (!shareQrCode) return;
+    const link = document.createElement("a");
+    link.href = shareQrCode;
+    link.download = `qr-${shareFile?.name || "code"}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const sortFileName = (filename) => {
     // Sort the file name to ensure consistent display
@@ -52,9 +88,6 @@ const GuestFilePreview = ({ guestFiles }) => {
         "Here’s your file: " + fullUrl
       )}`,
       copy: fullUrl,
-      qr: `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
-        fullUrl
-      )}&size=150x150`,
     };
   }
 
@@ -67,11 +100,11 @@ const GuestFilePreview = ({ guestFiles }) => {
     const updatedFiles = files.filter((file) => file.id !== fileId);
 
     setFiles(updatedFiles);
-    localStorage.setItem("guestFiles", JSON.stringify(updatedFiles));
-
-    // Re-sync from localStorage (if that's your source of truth)
-    const refreshedFiles = JSON.parse(localStorage.getItem("guestFiles")) || [];
-    setFiles(refreshedFiles);
+    if (updateFiles) {
+      updateFiles(updatedFiles);
+    } else {
+      localStorage.setItem("guestFiles", JSON.stringify(updatedFiles));
+    }
 
     toast.success("File deleted successfully!");
   };
@@ -125,29 +158,6 @@ const GuestFilePreview = ({ guestFiles }) => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  const downloadQRCode = async (shortUrl) => {
-  const qrUrl = handleShare(shortUrl).qr;
-
-  try {
-    const response = await fetch(qrUrl);
-    const blob = await response.blob();
-    const blobUrl = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.href = blobUrl;
-    link.download = "qr-code.png";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    // Clean up the blob URL
-    URL.revokeObjectURL(blobUrl);
-  } catch (error) {
-    console.error("QR code download failed:", error);
-    alert("Failed to download QR code. Please try again.");
-  }
-};
 
 
   return (
@@ -521,17 +531,24 @@ const GuestFilePreview = ({ guestFiles }) => {
               <p className="text-sm font-medium text-gray-400 mb-3">
                 Or share via QR Code
               </p>
-              <div className="bg-white p-2 rounded-xl inline-block shadow-lg mx-auto">
-                <img
-                  src={handleShare(shareFile.shortUrl).qr}
-                  alt="QR Code"
-                  className="w-24 h-24 rounded-lg"
-                />
+              <div className="bg-white p-2 rounded-xl inline-flex items-center justify-center shadow-lg mx-auto w-28 h-28">
+                {qrLoading ? (
+                  <div className="w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                ) : shareQrCode ? (
+                  <img
+                    src={shareQrCode}
+                    alt="QR Code"
+                    className="w-24 h-24 rounded-lg object-contain"
+                  />
+                ) : (
+                  <span className="text-xs text-gray-400">Unavailable</span>
+                )}
               </div>
               <div className="flex flex-row justify-center gap-3 mt-4">
                 <button
-                  onClick={() => downloadQRCode(shareFile.shortUrl)}
-                  className="flex-1 inline-flex justify-center items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white rounded-xl transition-all"
+                  onClick={downloadQRCode}
+                  disabled={!shareQrCode}
+                  className="flex-1 inline-flex justify-center items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white rounded-xl disabled:opacity-50 transition-all"
                 >
                   <FaDownload className="text-blue-400 text-lg" />
                   <span className="font-medium text-sm">Save QR</span>

@@ -4,9 +4,16 @@ import path from 'path';
 const storage = multer.memoryStorage();
 
 const allowedExtensions = [
-  '.jpg', '.jpeg', '.webp', '.png',
-  '.mp4', '.avi', '.mov', '.mkv', '.mk3d', '.mks', '.mka',
-  '.pdf'
+  // Images
+  '.jpg', '.jpeg', '.webp', '.png', '.gif', '.svg', '.bmp', '.ico', '.tiff',
+  // Videos
+  '.mp4', '.avi', '.mov', '.mkv', '.mk3d', '.mks', '.mka', '.webm', '.flv', '.wmv',
+  // Audio
+  '.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac',
+  // Documents & Text
+  '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.txt', '.csv', '.json', '.md', '.rtf',
+  // Archives
+  '.zip', '.rar', '.7z', '.tar', '.gz'
 ];
 
 const upload = multer({

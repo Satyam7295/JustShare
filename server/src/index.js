@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import connectDB from "./db/index.js"
 import fileRoutes from "./routes/file.routes.js"
 import userRoutes from "./routes/user.routes.js"
+import qrRoutes from "./routes/qr.routes.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.resolve();
@@ -25,6 +26,7 @@ const startServer = async () => {
     // Register routes
     app.use("/api/files", fileRoutes);
     app.use("/api/users", userRoutes); // 👈 Now you can use /api/users endpoints
+    app.use("/api/qr", qrRoutes); // 👈 QR code generation endpoint
 
     app.use(express.static(path.join(__dirname, '/client')));
 
@@ -49,6 +51,21 @@ app.get('/f/:shortCode', async (req, res) => {
       }
 
 });
+
+    // Global error handling middleware (ensures all errors return JSON instead of HTML 500)
+    app.use((err, _req, res, _next) => {
+      console.error("Global Server Error:", err);
+      if (err?.code === "LIMIT_FILE_SIZE") {
+        return res.status(400).json({ error: "File too large. Maximum size is 10 MB." });
+      }
+      if (err?.message?.includes("Unsupported file type")) {
+        return res.status(400).json({ error: err.message.replace(/^❌\s*/, "") });
+      }
+      if (err?.name === "MulterError") {
+        return res.status(400).json({ error: err.message });
+      }
+      return res.status(err.status || 500).json({ error: err.message || "Internal Server Error" });
+    });
 
     app.listen(PORT, () => {
       console.log(`✅ Server is running at http://localhost:${PORT}`);

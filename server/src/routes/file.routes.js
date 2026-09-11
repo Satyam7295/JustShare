@@ -1,14 +1,27 @@
 import express, { Router } from "express"
 import upload from "../middlewares/upload.middlewares.js";
 import { deleteFile, downloadInfo, downloadFile, generateQR, generateShareShortenLink, getDownloadCount, getFileDetails, getUserFiles, resolveShareLink, searchFiles, sendLinkEmail, showUserFiles, updateAllFileExpiry, updateFileExpiry, updateFilePassword, updateFileStatus, uploadFiles, verifyFilePassword, uploadFilesGuest, guestDownloadInfo, verifyGuestFilePassword ,  } from "../controllers/file.controller.js";
-
+import { getQRCode } from "../controllers/qr.controller.js";
 
 const router=Router();
+
+router.get("/qr", getQRCode);
 
 const handleUpload = (uploadMiddleware, handler) => [
   (req, res, next) => {
     uploadMiddleware(req, res, (err) => {
-      if (err) return next(err);
+      if (err) {
+        if (err.code === "LIMIT_FILE_SIZE") {
+          return res.status(400).json({ error: "File too large. Maximum size allowed is 10 MB." });
+        }
+        if (err.message && err.message.includes("Unsupported file type")) {
+          return res.status(400).json({ error: err.message.replace(/^❌\s*/, "") });
+        }
+        if (err.name === "MulterError") {
+          return res.status(400).json({ error: err.message });
+        }
+        return res.status(400).json({ error: err.message || "File upload error" });
+      }
       next();
     });
   },

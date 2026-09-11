@@ -14,49 +14,49 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("home");
 
   useEffect(() => {
-    const timeout = setTimeout(() => setLoading(false), 1500);
+    const timeout = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(timeout);
   }, []);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-900">
-        <h1 className="text-3xl font-bold text-gray-300 animate-pulse">Loading...</h1>
+      <div className="flex items-center justify-center min-h-screen bg-[var(--bg-color)] text-[var(--text-color)]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-3 border-gray-400 border-t-gray-900 dark:border-t-white rounded-full animate-spin"></div>
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Loading Dashboard...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <>
-    <div className="min-h-screen flex bg-gray-900">
-      <Sidebar sidebarOpen={sidebarOpen}  setSidebarOpen={setSidebarOpen} setActiveTab={setActiveTab} activeTab={activeTab}/>
-      {sidebarOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden" onClick={() => setSidebarOpen(false)} />
-      )}
-      <div className="flex flex-col flex-1">
-        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main className="flex-1 p-6 mt-20">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-color)] text-[var(--text-color)] pt-16 sm:pt-24 transition-colors duration-300 relative">
+      <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+      <div className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row gap-6 my-6">
+        <Sidebar
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+          setActiveTab={setActiveTab}
+          activeTab={activeTab}
+        />
+
+        <main className="flex-1 min-w-0">
           {activeTab === "upload" && <UploadPage />}
           {activeTab === "profile" && <UserProfile />}
           {activeTab === "settings" && <UserProfile />}
           {activeTab === "logout" && <Logout />}
-          {activeTab === "home" && 
-
-           <>
-          <h2 className="text-2xl font-bold text mb-4">Dashboard Overview</h2>
-          <StatsGrid />
-          <FileShow />
-         </>
-           }
-           
+          {activeTab === "home" && (
+            <div className="space-y-6">
+              <StatsGrid />
+              <FileShow />
+            </div>
+          )}
         </main>
-        
       </div>
-      
+
+      <Footer />
     </div>
-    <Footer/>
-    </>
-    
   );
 };
 

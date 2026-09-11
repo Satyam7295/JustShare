@@ -12,27 +12,31 @@ const WelcomeSection = ({ user }) => {
   const greeting = getGreeting();
 
   return (
-    <section
-      className="relative overflow-hidden rounded-2xl p-8 mb-6 text-[var(--text-on-primary)] animate-fade-in"
-      style={{
-        background: "var(--gradient-bg)", // dynamic gradient via theme
-      }}
-    >
+    <section className="glass-panel p-6 sm:p-8 mb-6 relative overflow-hidden text-[var(--text-color)] shadow-sm">
       <div className="relative z-10 flex items-center gap-6 flex-wrap">
-        <img
-          src={user?.profilePic}
-          alt="Profile"
-          className="w-20 h-20 rounded-full border-4 border-white shadow"
-        />
-        <div>
-          <h1 className="text-2xl font-bold">{greeting}, {user?.fullname}! ✨</h1>
-          <p className="opacity-90">{user?.email}</p>
-          <p className="opacity-70 text-sm">@{user?.username}</p>
+        <div className="relative">
+          <img
+            src={user?.profilePic || "https://avatar.iran.liara.run/public/1"}
+            alt="Profile"
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border border-black/10 dark:border-white/10 shadow-sm"
+          />
+          <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-[var(--surface-color)] rounded-full"></span>
+        </div>
+
+        <div className="flex-1 min-w-[200px]">
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+              {greeting}, {user?.fullname || "User"}
+            </h1>
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+              Active Member
+            </span>
+          </div>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            {user?.email} <span className="mx-1.5">•</span> @{user?.username}
+          </p>
         </div>
       </div>
-
-      {/* Floating gradient light effect */}
-      <div className="absolute -top-1/2 -right-1/2 w-[200%] h-[200%] bg-[radial-gradient(circle,rgba(255,255,255,0.1)_0%,transparent_70%)] animate-floating pointer-events-none" />
     </section>
   );
 };

@@ -6,6 +6,7 @@ import AWS from "aws-sdk";
 import nodemailer from "nodemailer";
 import shortid from "shortid";
 import QRCode from "qrcode";
+import { generateQRCodeDataURL } from "../utils/qrCode.js";
 import { User } from '../models/user.models.js';
 import path from "path";
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
@@ -86,11 +87,15 @@ const uploadFiles = async (req, res) => {
       const savedFile = await newFile.save();
       savedFiles.push(savedFile);
 
-      // Update user stats
-      user.totalUploads += 1;
-      if (file.mimetype.startsWith('image/')) user.imageCount += 1;
-      else if (file.mimetype.startsWith('video/')) user.videoCount += 1;
-      else if (file.mimetype.startsWith('application/')) user.documentCount += 1;
+      // Update user stats safely
+      user.totalUploads = (Number(user.totalUploads) || 0) + 1;
+      if (file.mimetype.startsWith('image/')) {
+        user.imageCount = (Number(user.imageCount) || 0) + 1;
+      } else if (file.mimetype.startsWith('video/')) {
+        user.videoCount = (Number(user.videoCount) || 0) + 1;
+      } else {
+        user.documentCount = (Number(user.documentCount) || 0) + 1;
+      }
     }
 
     await user.save();
@@ -237,11 +242,6 @@ const downloadInfo = async (req, res) => {
 
     const command = new GetObjectCommand(params);
     const downloadUrl = await getSignedUrl(s3, command, { expiresIn: 24 * 60 * 60 }); // 24 hours
-    const previewCommand = new GetObjectCommand({
-      Bucket: bucketName,
-      Key: `file-share-app/${file.name}`,
-    });
-    const previewUrl = await getSignedUrl(s3, previewCommand, { expiresIn: 24 * 60 * 60 });
 
     file.downloadedContent++;
     await file.save();
@@ -255,7 +255,6 @@ const downloadInfo = async (req, res) => {
 
     return res.status(200).json({
       downloadUrl,
-      previewUrl,
       id: file._id,
       name: file.name,
       size: file.size,
@@ -308,11 +307,6 @@ const guestDownloadInfo = async (req, res) => {
 
     const command = new GetObjectCommand(params);
     const downloadUrl = await getSignedUrl(s3, command, { expiresIn: 24 * 60 * 60 });
-    const previewCommand = new GetObjectCommand({
-      Bucket: bucketName,
-      Key: `file-share-app/${file.name}`,
-    });
-    const previewUrl = await getSignedUrl(s3, previewCommand, { expiresIn: 24 * 60 * 60 });
 
     file.downloadedContent++;
     await file.save();
@@ -320,7 +314,6 @@ const guestDownloadInfo = async (req, res) => {
 
     return res.status(200).json({
       downloadUrl,
-      previewUrl,
       id: file._id,
       name: file.name,
       size: file.size,
@@ -686,10 +679,9 @@ const generateQR = async (req, res) => {
     if (!file) return res.status(404).json({ error: 'File not found' });
 
     const fileUrl = file.path;
+    const qrDataUrl = await generateQRCodeDataURL(fileUrl);
 
-    const qrDataUrl = await QRCode.toDataURL(fileUrl);
-
-    res.status(200).json({ qr: qrDataUrl });
+    res.status(200).json({ qrCode: qrDataUrl, qr: qrDataUrl });
   } catch (error) {
     console.error('QR generation error:', error);
     res.status(500).json({ error: 'Failed to generate QR code' });

@@ -40,17 +40,4 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('dev'))
 
-app.use((err, _req, res, next) => {
-  if (err?.code === "LIMIT_FILE_SIZE") {
-    return res.status(400).json({ error: "File too large. Maximum size is 10 MB." });
-  }
-  if (err?.message?.includes("Unsupported file type")) {
-    return res.status(400).json({ error: err.message.replace(/^❌\s*/, "") });
-  }
-  if (err?.name === "MulterError") {
-    return res.status(400).json({ error: err.message });
-  }
-  next(err);
-});
-
 export {app};

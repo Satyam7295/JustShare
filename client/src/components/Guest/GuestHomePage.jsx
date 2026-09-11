@@ -38,7 +38,7 @@ useEffect(() => {
         
         {files.length > 0 && (
           <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            <GuestFilePreview guestFiles={files} />
+            <GuestFilePreview guestFiles={files} updateFiles={updateFiles} />
           </div>
         )}
       </main>

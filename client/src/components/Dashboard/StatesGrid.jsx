@@ -58,24 +58,19 @@ const StatsGrid = () => {
         {cards.map((card, index) => (
           <div
             key={index}
-            className="relative p-5 rounded-xl bg-gray-900 dark:bg-black shadow-md transition hover:shadow-lg"
+            className="glass-panel p-5 rounded-2xl flex items-center justify-between hover:shadow-md transition-all group"
           >
-            {/* Top Gradient Border */}
-            <div className="absolute top-0 left-0 w-full h-1 rounded-t-xl bg-[var(--primary-gradient)]" />
-
-            {/* Icon */}
-            <div className="flex items-center justify-center h-full gap-10">
-              {/* <div className="w-20 h-20 mb-4 bg-[var(--primary-soft)] text-[var(--primary-text)] rounded-xl flex items-center justify-center text-xl">
-                {card.icon}
-              </div> */}
-              <div className="text-center">
-                <p className="text-2xl font-semibold text-[var(--primary-text)]">{card.value}</p>
-                <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm">{card.title}</p>
-              </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                {card.title}
+              </p>
+              <p className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {card.value}
+              </p>
             </div>
-           
-
-            
+            <div className="w-12 h-12 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 flex items-center justify-center text-2xl transition-transform duration-300 group-hover:scale-110">
+              {card.icon}
+            </div>
           </div>
         ))}
       </div>

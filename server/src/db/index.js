@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const moduleDir = path.dirname(__filename);
-dotenv.config({ path: path.resolve(moduleDir, "../.env") });
+dotenv.config({ path: path.resolve(moduleDir, "../../.env") });
 
 const isLikelyHostname = (value) => value.split(".").length >= 3;
 

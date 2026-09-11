@@ -20,62 +20,94 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
   };
 
   return (
-    <header className="w-full flex items-center justify-between px-4 py-5 border-b shadow-sm fixed top-0 left-0 z-50 bg-[var(--bg-color)] text-[var(--text-color)]">
-      {/* Hamburger for Mobile */}
-      <button
-        className="focus:outline-none md:hidden"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        aria-label="Toggle sidebar"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          {sidebarOpen ? (
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          ) : (
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          )}
-        </svg>
-      </button>
+    <>
+      {/* 📱 MOBILE HEADER */}
+      <header className="w-full sm:hidden flex items-center justify-between px-4 py-3 fixed top-0 left-0 z-50 glass-header text-[var(--text-color)] transition-all duration-300">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2 -ml-1 rounded-xl hover:bg-black/5 dark:hover:bg-white/10 transition-colors focus:outline-none"
+            aria-label="Toggle sidebar"
+          >
+            <svg className="w-6 h-6 text-[var(--text-color)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              {sidebarOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+          <Link to="/" className="flex items-center space-x-2">
+            <img src={logo} alt="Logo" className="w-8 h-8" />
+            <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">JustShare</span>
+          </Link>
+        </div>
 
-      {/* Branding */}
-      <div className="hidden sm:flex flex-col text-center">
-        <Link to="/" className="flex items-center space-x-2">
-          <img src={logo} alt="Logo" className="w-10 h-10" />
-          <span className="text-3xl font-bold text-[var(--primary-text)]">JustShare</span>
-        </Link>
-        <span className="text-base text-[var(--secondary-text)]">Share Files Without Logging Into WhatsApp</span>
-      </div>
+        <div className="flex items-center space-x-3">
+          {/* Mode Toggle */}
+          <label className="relative inline-flex items-center cursor-pointer group" title="Toggle Theme">
+            <input
+              type="checkbox"
+              checked={mode === "dark"}
+              onChange={() => setMode(mode === "light" ? "dark" : "light")}
+              className="sr-only peer"
+            />
+            <div className={`w-11 h-6 rounded-full transition-colors duration-300 shadow-inner ${mode === "dark" ? "bg-[#333333]" : "bg-gray-300"}`}></div>
+            <div className={`absolute left-1 top-1 w-4 h-4 rounded-full bg-white transition-all duration-300 shadow-sm ${mode === "dark" ? "translate-x-5" : ""}`}></div>
+          </label>
 
-      {/* Theme and User */}
-      <div className="flex items-center space-x-4">
-        {/* Dark/Light Toggle */}
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            checked={mode === "dark"}
-            onChange={() => setMode(mode === "light" ? "dark" : "light")}
-            className="sr-only peer"
-          />
-          <div className={`w-11 h-6 bg-gray-300 peer-checked:bg-[var(--primary-text)] rounded-full relative transition`}>
-            <div
-              className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${
-                mode === "dark" ? "translate-x-5" : ""
-              }`}
-            ></div>
-          </div>
-        </label>
-
-        {/* User Info */}
-        <div className="flex items-center space-x-2 cursor-pointer" tabIndex={0} role="button">
-          <div className="w-9 h-9 rounded-full bg-[var(--primary-text)] flex items-center justify-center text-white font-bold">
+          {/* User Avatar */}
+          <div className="w-8 h-8 rounded-full bg-black dark:bg-[#1c1c1e] text-white dark:text-[#f5f5f5] border border-black/10 dark:border-white/10 flex items-center justify-center font-semibold text-xs">
             {user?.fullname?.charAt(0).toUpperCase() || "U"}
           </div>
-          <div className="hidden md:block">
-            <h3 className="text-sm font-medium">{user?.fullname || "User"}</h3>
-            <p className="text-xs text-gray-300">{user?.email || "user@example.com"}</p>
-          </div>
         </div>
+      </header>
+
+      {/* 🖥 DESKTOP FLOATING HEADER */}
+      <div className="hidden sm:flex justify-center fixed top-4 left-0 w-full z-50 px-6 transition-all duration-300">
+        <header className="w-full max-w-6xl items-center justify-between px-6 py-3 glass-panel flex text-[var(--text-color)]">
+          <div className="flex items-center space-x-4">
+            <Link to="/" className="flex items-center space-x-3 group">
+              <img src={logo} alt="Logo" className="w-10 h-10 transition-transform duration-300 group-hover:scale-105" />
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">JustShare</span>
+              </div>
+            </Link>
+          </div>
+
+          <span className="hidden md:block text-sm font-medium text-gray-500 tracking-wide">
+            Dashboard & File Manager
+          </span>
+
+          <div className="flex items-center space-x-5">
+            {/* 🌙 Mode Toggle */}
+            <label className="relative inline-flex items-center cursor-pointer group" title="Toggle Theme">
+              <input
+                type="checkbox"
+                checked={mode === "dark"}
+                onChange={() => setMode(mode === "light" ? "dark" : "light")}
+                className="sr-only peer"
+              />
+              <div className={`w-12 h-6 rounded-full transition-colors duration-300 shadow-inner ${mode === "dark" ? "bg-[#333333]" : "bg-gray-300"}`}></div>
+              <div className={`absolute left-1 top-1 w-4 h-4 rounded-full bg-white transition-all duration-300 shadow-sm group-hover:scale-110 ${mode === "dark" ? "translate-x-6" : ""}`}></div>
+            </label>
+
+            <div className="h-6 w-px bg-black/10 dark:bg-white/20"></div>
+
+            {/* User Profile Pill */}
+            <div className="flex items-center space-x-3 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+              <div className="w-7 h-7 rounded-full bg-black dark:bg-[#1c1c1e] text-white dark:text-[#f5f5f5] flex items-center justify-center font-bold text-xs">
+                {user?.fullname?.charAt(0).toUpperCase() || "U"}
+              </div>
+              <div className="text-left">
+                <p className="text-xs font-semibold text-gray-900 dark:text-white leading-tight">{user?.fullname || "User"}</p>
+                <p className="text-[10px] text-gray-500 dark:text-gray-400 leading-tight truncate max-w-[120px]">{user?.email || "user@example.com"}</p>
+              </div>
+            </div>
+          </div>
+        </header>
       </div>
-    </header>
+    </>
   );
 };
 

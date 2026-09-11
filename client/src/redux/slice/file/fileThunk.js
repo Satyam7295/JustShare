@@ -12,7 +12,13 @@ export const uploadFile = createAsyncThunk("file/upload",async (formData, { reje
       const res = await axiosInstance.post("/files/upload", formData);
       return res.data; // returns { message, fileIds }
     } catch (err) {
-      return rejectWithValue(err.response?.data);
+      const errorMsg =
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        (typeof err.response?.data === 'string' && !err.response.data.startsWith('<!') ? err.response.data : null) ||
+        err.message ||
+        "Upload failed";
+      return rejectWithValue({ error: errorMsg });
     }
   }
 );
