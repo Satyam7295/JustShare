@@ -104,13 +104,18 @@ const GuestFileUpload = ({guestFiles, updateFiles}) => {
         // window.location.reload();
       }
     } catch (err) {
-      const errorMsg =
+      let errorMsg =
         err?.response?.data?.error ||
         err?.response?.data?.message ||
         (typeof err?.response?.data === 'string' && !err.response.data.startsWith('<!') ? err.response.data : null) ||
         err?.error ||
-        err?.message ||
-        "Upload failed";
+        err?.message;
+
+      if (!errorMsg && err?.response?.status === 404) {
+        errorMsg = "Backend API not found (404). Please ensure your backend is deployed and VITE_API_BASE_URL is configured in Vercel.";
+      } else if (!errorMsg) {
+        errorMsg = "Upload failed. Please check network connection or server status.";
+      }
       toast.error(errorMsg);
       setLoading(false);
     }

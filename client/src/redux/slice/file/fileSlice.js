@@ -59,6 +59,7 @@ const fileSlice = createSlice({
       })
 
       .addCase(getFileDetails.fulfilled, (state, action) => {
+        state.loading = false;
         state.selectedFile = action.payload;
       })
       .addCase(getFileDetails.rejected, (state, action) => {
@@ -71,6 +72,7 @@ const fileSlice = createSlice({
       })
 
       .addCase(deleteFile.fulfilled, (state, action) => {
+        state.loading = false;
         state.files = state.files.filter((f) => f._id !== action.payload);
       })
       .addCase(deleteFile.rejected, (state, action) => {
@@ -83,6 +85,7 @@ const fileSlice = createSlice({
       })
 
       .addCase(updateFileStatus.fulfilled, (state, action) => {
+        state.loading = false;
         state.files = state.files.map((f) =>
           f._id === action.payload._id ? action.payload : f
         );
@@ -96,6 +99,7 @@ const fileSlice = createSlice({
         state.error = null;
       })
       .addCase(generateShareShortenLink.fulfilled, (state, action) => {
+        state.loading = false;
         state.selectedFile = action.payload;
       })
       .addCase(generateShareShortenLink.rejected, (state, action) => {
@@ -107,7 +111,9 @@ const fileSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(sendLinkEmail.fulfilled, () => {})
+      .addCase(sendLinkEmail.fulfilled, (state) => {
+        state.loading = false;
+      })
       .addCase(sendLinkEmail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
@@ -118,6 +124,7 @@ const fileSlice = createSlice({
         state.error = null;
       })
       .addCase(updateFileExpiry.fulfilled, (state, action) => {
+        state.loading = false;
         state.selectedFile = action.payload;
       })
       .addCase(updateFileExpiry.rejected, (state, action) => {
@@ -130,6 +137,7 @@ const fileSlice = createSlice({
       })
 
       .addCase(updateFilePassword.fulfilled, (state, action) => {
+        state.loading = false;
         state.selectedFile = action.payload;
       })
       .addCase(updateFilePassword.rejected, (state, action) => {
@@ -141,6 +149,7 @@ const fileSlice = createSlice({
         state.error = null;
       })
       .addCase(searchFiles.fulfilled, (state, action) => {
+        state.loading = false;
         state.files = action.payload;
       })
       .addCase(searchFiles.rejected, (state, action) => {
@@ -153,6 +162,7 @@ const fileSlice = createSlice({
         state.error = null;
       })
       .addCase(showUserFiles.fulfilled, (state, action) => {
+        state.loading = false;
         state.userFiles = action.payload;
       })
       .addCase(showUserFiles.rejected, (state, action) => {
@@ -164,6 +174,7 @@ const fileSlice = createSlice({
         state.error = null;
       })
       .addCase(generateQR.fulfilled, (state, action) => {
+        state.loading = false;
         state.qrCodeUrl = action.payload;
       })
       .addCase(generateQR.rejected, (state, action) => {
@@ -175,6 +186,7 @@ const fileSlice = createSlice({
         state.error = null;
       })
       .addCase(getDownloadCount.fulfilled, (state, action) => {
+        state.loading = false;
         const { fileId, count } = action.payload;
         state.downloadCounts[fileId] = count;
       })
@@ -187,6 +199,7 @@ const fileSlice = createSlice({
         state.error = null;
       })
       .addCase(resolveShareLink.fulfilled, (state, action) => {
+        state.loading = false;
         state.resolvedFile = action.payload;
       })
       .addCase(resolveShareLink.rejected, (state, action) => {
@@ -198,6 +211,7 @@ const fileSlice = createSlice({
         state.error = null;
       })
       .addCase(verifyFilePassword.fulfilled, (state, action) => {
+        state.loading = false;
         state.resolvedFile = action.payload;
       })
       .addCase(verifyFilePassword.rejected, (state, action) => {

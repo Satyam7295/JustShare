@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadFile } from "../../../redux/slice/file/fileThunk";
+import { uploadFile, getUserFiles } from "../../../redux/slice/file/fileThunk";
 import { toast } from "react-toastify";
 
 const FileUploader = () => {
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.file);
   const { user } = useSelector((state) => state.auth);
+  const [uploading, setUploading] = useState(false);
 
   const [files, setFiles] = useState([]);
   const [enablePassword, setEnablePassword] = useState(false);
@@ -91,20 +91,30 @@ const FileUploader = () => {
       formData.append("password", password);
     }
 
+    setUploading(true);
     try {
       await dispatch(uploadFile(formData)).unwrap();
       toast.success("Files uploaded successfully!");
       setFiles([]);
-      window.location.reload();
+      if (userId) {
+        dispatch(getUserFiles(userId));
+      }
     } catch (err) {
-      const errorMsg =
+      let errorMsg =
         err?.error ||
         err?.message ||
         err?.response?.data?.error ||
         err?.response?.data?.message ||
-        (typeof err?.response?.data === "string" && !err.response.data.startsWith("<!") ? err.response.data : null) ||
-        "Upload failed";
+        (typeof err?.response?.data === "string" && !err.response.data.startsWith("<!") ? err.response.data : null);
+
+      if (!errorMsg && err?.response?.status === 404) {
+        errorMsg = "Backend API not found (404). Please ensure your backend is deployed and VITE_API_BASE_URL is set in Vercel.";
+      } else if (!errorMsg) {
+        errorMsg = "Upload failed. Please check network connection or server status.";
+      }
       toast.error(errorMsg);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -272,10 +282,10 @@ const FileUploader = () => {
       <div className="mt-8">
         <button
           onClick={handleUpload}
-          disabled={loading || files.length === 0}
+          disabled={uploading || files.length === 0}
           className="btn-primary w-full py-3.5 rounded-xl text-base font-semibold shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? (
+          {uploading ? (
             <>
               <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
