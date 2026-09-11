@@ -1,6 +1,6 @@
 import { File } from '../models/file.models.js';
 import { GuestFile } from '../models/guestFile.models.js';
-import s3 from "../config/s3.js";
+import s3, { awsRegion, awsAccessKeyId, awsSecretAccessKey, awsBucketName } from "../config/s3.js";
 import bcrypt from "bcryptjs";
 import AWS from "aws-sdk";
 import nodemailer from "nodemailer";
@@ -12,7 +12,7 @@ import path from "path";
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-const bucketName = process.env.AWS_BUCKET_NAME || process.env.AWS_S3_BUCKET_NAME;
+const bucketName = awsBucketName;
 
 
 
@@ -37,9 +37,9 @@ const uploadFiles = async (req, res) => {
 
   try {
     const s3 = new AWS.S3({
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      region: process.env.AWS_REGION,
+      accessKeyId: awsAccessKeyId,
+      secretAccessKey: awsSecretAccessKey,
+      region: awsRegion,
     });
 
     const savedFiles = [];
@@ -127,9 +127,9 @@ const uploadFilesGuest = async (req, res) => {
 
       try {
            const s3 = new AWS.S3({
-             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-             region: process.env.AWS_REGION
+             accessKeyId: awsAccessKeyId,
+             secretAccessKey: awsSecretAccessKey,
+             region: awsRegion
            });
 
             const savedFiles = [];
@@ -227,10 +227,10 @@ const downloadInfo = async (req, res) => {
     }
 
     const s3 = new S3Client({
-      region: process.env.AWS_REGION,
+      region: awsRegion,
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+        accessKeyId: awsAccessKeyId,
+        secretAccessKey: awsSecretAccessKey
       }
     });
 
@@ -292,10 +292,10 @@ const guestDownloadInfo = async (req, res) => {
       return res.status(410).json({ error: 'This file has expired' });
     }
     const s3 = new S3Client({
-      region: process.env.AWS_REGION,
+      region: awsRegion,
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+        accessKeyId: awsAccessKeyId,
+        secretAccessKey: awsSecretAccessKey
       }
     });
 
@@ -366,9 +366,9 @@ const downloadFile = async (req, res) => {
     }
 
     const s3 = new AWS.S3({
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      region: process.env.AWS_REGION
+      accessKeyId: awsAccessKeyId,
+      secretAccessKey: awsSecretAccessKey,
+      region: awsRegion
     });
 
     const key = `file-share-app/${file.name}`;
@@ -417,10 +417,10 @@ const deleteFile = async (req, res) => {
           return res.status(400).json({error:'File already deleted'});
         }
 
-        const s3 =new AWS.S3({
-          accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-          region: process.env.AWS_REGION
+        const s3 = new AWS.S3({
+          accessKeyId: awsAccessKeyId,
+          secretAccessKey: awsSecretAccessKey,
+          region: awsRegion
         })
 
         const params={
@@ -784,9 +784,9 @@ const getUserFiles = async (req, res) => {
     }
 
     const s3 = new AWS.S3({
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      region: process.env.AWS_REGION,
+      accessKeyId: awsAccessKeyId,
+      secretAccessKey: awsSecretAccessKey,
+      region: awsRegion,
     });
 
     const filesWithPreviewUrls = files.map((file) => {

@@ -134,6 +134,12 @@ AWS_SECRET_ACCESS_KEY=your_aws_secret
 AWS_REGION=your_aws_region
 AWS_BUCKET_NAME=your_s3_bucket
 
+# For Vercel / AWS Lambda deployments (to avoid "reserved environment variable" warnings):
+# MY_AWS_ACCESS_KEY_ID=your_aws_access_key
+# MY_AWS_SECRET_ACCESS_KEY=your_aws_secret
+# MY_AWS_REGION=your_aws_region
+# MY_AWS_BUCKET_NAME=your_s3_bucket
+
 MAIL_USER=your_email
 MAIL_PASS=your_email_password
 BASE_URL=http://localhost:6600
